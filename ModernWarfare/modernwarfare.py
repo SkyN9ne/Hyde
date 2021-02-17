@@ -29,12 +29,16 @@ from .XAssets import (
     OfficerChallenges,
     Operators,
     Quips,
+    Reticles,
+    SeasonalChallenges,
+    SeasonalEvents,
     Skins,
     SpecialItems,
     Splashes,
     Sprays,
     Stickers,
     TurboChallenges,
+    UnlockItemsT9,
     VehicleCamos,
     VehicleHorns,
     Vehicles,
@@ -61,6 +65,20 @@ class LootMaster(TypedDict):
     typeImg: str
     breadcrumb: str
     baseWeaponRef: str
+
+
+class ItemSourceTable(TypedDict):
+    """Structure of mp/itemsourcetable.csv"""
+
+    marketPlaceID: int
+    refType: str
+    refName: str
+    gameSourceID: str
+    equippableIW8MP: int  # bool
+    equippableWZ: int  # bool
+    equippableT9: int  # bool
+    equippableS4: int  # bool
+    lookupType: str
 
 
 class OperatorIDs(TypedDict):
@@ -96,6 +114,7 @@ class WeaponClassTable(TypedDict):
     canBeGunsmithed: int  # bool
     attachCategoryWhitelist: str  # Array of strings
     hasVariants: int  # bool
+    isWZOnly: int  # bool
 
 
 class AttachmentCategoryTable(TypedDict):
@@ -151,6 +170,9 @@ class ModernWarfare:
         self.lootTypes: List[Dict[str, Any]] = Utility.ReadCSV(
             self, f"{self.iXAssets}/loot/loot_master.csv", LootMaster, 1
         )
+        self.itemSources: List[Dict[str, Any]] = Utility.ReadCSV(
+            self, f"{self.iXAssets}/mp/itemsourcetable.csv", ItemSourceTable
+        )
         self.operatorIds: List[Dict[str, Any]] = Utility.ReadCSV(
             self, f"{self.iXAssets}/loot/operator_ids.csv", OperatorIDs
         )
@@ -190,12 +212,16 @@ class ModernWarfare:
         OfficerChallenges.Compile(self)
         Operators.Compile(self)
         Quips.Compile(self)
+        Reticles.Compile(self)
+        SeasonalChallenges.Compile(self)
+        SeasonalEvents.Compile(self)
         Skins.Compile(self)
         SpecialItems.Compile(self)
         Splashes.Compile(self)
         Sprays.Compile(self)
         Stickers.Compile(self)
         TurboChallenges.Compile(self)
+        UnlockItemsT9.Compile(self)
         VehicleCamos.Compile(self)
         VehicleHorns.Compile(self)
         Vehicles.Compile(self)
@@ -211,28 +237,40 @@ class ModernWarfare:
     def LoadLocalize(self: Any) -> Dict[str, Optional[str]]:
         """Load and filter the localized string entries for Modern Warfare."""
 
-        localize: dict = Utility.ReadFile(self, f"{self.iXAssets}/localize.json")
-        placeholders: List[str] = Utility.ReadFile(
-            self, "ModernWarfare/placeholders.json"
+        localize: Dict[str, Optional[str]] = Utility.ReadFile(
+            self, f"{self.iXAssets}/localize.json"
         )
+        placeholders: dict = Utility.ReadFile(self, "ModernWarfare/placeholders.json")
 
         for key in localize:
             value: Optional[str] = localize.get(key)
 
             if value is None:
                 continue
-            elif value == "":
-                localize[key] = None
-                continue
 
-            for placeholder in placeholders:
-                if value.lower().startswith(placeholder.lower()):
+            for placeholder in placeholders.get("whole"):
+                if value.lower() == placeholder.lower():
                     localize[key] = None
-                elif value.lower().endswith(placeholder.lower()):
+
+                    break
+
+            for placeholder in placeholders.get("begins"):
+                if value.lower().startswith(placeholder.lower()) is True:
                     localize[key] = None
+
+                    break
+
+            for placeholder in placeholders.get("ends"):
+                if value.lower().endswith(placeholder.lower()) is True:
+                    localize[key] = None
+
+                    break
 
             if (value := localize.get(key)) is not None:
-                localize[key] = Utility.StripColorCodes(self, value)
+                value = Utility.StripColorCodes(self, value)
+                value = Utility.StripButtonCodes(self, value)
+
+                localize[key] = value
 
         return localize
 
@@ -252,20 +290,99 @@ class ModernWarfare:
             end: int = loot.get("rangeEnd")
 
             if (id >= start) and (id <= end):
-                return self.localize.get(loot.get("typeNameLoc"))
+                typeNameLoc: Optional[str] = loot.get("typeNameLoc")
+
+                if typeNameLoc == "LOOT_MP/PLACEHOLDER":
+                    break
+
+                return self.localize.get(typeNameLoc)
+
+        for source in self.itemSources:
+            if source.get("marketPlaceID") == id:
+                refType: Optional[str] = source.get("refType")
+
+                # Partially defined in ui/utils/lootutils.lua
+                if refType == "weapon":
+                    return self.localize.get("LOOT_MP/ITEM_TYPE_WEAPON")
+                elif refType == "operator":
+                    return self.localize.get("LOOT_MP/OPERATOR")
+                elif refType == "operator_skin":
+                    return self.localize.get("LOOT_MP/OPERATOR_SKIN")
+                elif refType == "executions":
+                    return self.localize.get("LOOT_MP/OPERATOR_EXECUTION")
+                elif refType == "equipment":
+                    return self.localize.get("LOOT_MP/EQUIPMENT")
+                elif refType == "accessory":
+                    return self.localize.get("LOOT_MP/WATCH")
+                elif refType == "playercards":
+                    return self.localize.get("LOOT_MP/CALLING_CARD")
+                elif refType == "weapon_charm":
+                    return self.localize.get("LOOT_MP/CHARM")
+                elif refType == "quip":
+                    return self.localize.get("LOOT_MP/OPERATOR_QUIP")
+                elif refType == "camo":
+                    return self.localize.get("LOOT_MP/CAMO")
+                elif refType == "emblems":
+                    return self.localize.get("LOOT_MP/EMBLEM")
+                elif refType == "attachment":
+                    return self.localize.get("LOOT_MP/ATTACHMENT")
+                elif refType == "sticker":
+                    return self.localize.get("LOOT_MP/STICKER")
+                elif refType == "xp_token":
+                    return self.localize.get("LOOT_MP/CONSUMABLE")
+                elif refType == "markeritem":
+                    return self.localize.get("LOOT_MP/CONSUMABLE")
+                elif refType == "reticle":
+                    return self.localize.get("LOOT_MP/RETICLE")
+                elif refType == "blueprint":
+                    return self.localize.get("LOOT_MP/ITEM_TYPE_WEAPON")
+                elif refType == "battlepass":
+                    return self.localize.get("LOOT_MP/BATTLE_PASS")
+                elif refType == "vehicle_track":
+                    return self.localize.get("LOOT_MP/VEHICLE_TRACK")
+                elif refType == "vehicle_horn":
+                    return self.localize.get("LOOT_MP/VEHICLE_HORN")
+                elif refType == "feature":
+                    return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "weapon_attachment":
+                    return self.localize.get("LOOT_MP/ATTACHMENT")
+                elif refType == "perk":
+                    return self.localize.get("LOOT_MP/PERK")
+                elif refType == "t9_equipment":
+                    return self.localize.get("LOOT_MP/EQUIPMENT")
+                elif refType == "killstreak":
+                    return self.localize.get("LOOT_MP/STREAK")
+                elif refType == "class":
+                    return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "zm_unlockable":
+                    return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "weapon_skill":
+                    return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "bonuscard":
+                    return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "vehicleskin":
+                    return self.localize.get("LOOT_MP/VEHICLE_SKIN")
+                elif refType == "placeholder":
+                    return
+                else:
+                    log.warning(
+                        f"Found unknown Loot Type; ID: {id}, refType: {refType}"
+                    )
 
     def GetLootSeason(self: Any, license: int) -> Optional[str]:
         """Get the loot season for the provided value."""
 
-        # TODO: This can be improved. Need to research non-seasonal values,
-        # such as 99, to handle the other license types.
-
         if license == 0:
-            # Does not necessarily mean that the item is a part of Season 0.
             return
+        elif license == 99:
+            # Defined in ui/utils/lootutils.lua
+            return "Unreleased"
         elif ((license - 1) % 1000) == 0:
             # For instances such as the Season 4: Reloaded update.
             license -= 1
+        elif ((license - 2) % 1000) == 0:
+            # For instances such as the Season 6 extension.
+            license -= 2
         elif (license % 1000) != 0:
             # Seasonal licenses are multiples of 1,000.
             return
@@ -283,6 +400,10 @@ class ModernWarfare:
             # Same reason as universal_ref, however, this is only intended
             # for use with Operators where isLaunchOperator is True.
             return 29998
+        elif reference == "t9_exclusive_ref":
+            # Same reason as universal_ref, however, this is only intended
+            # for use with Black Ops Cold War Operators.
+            return 29997
 
         for operator in self.operatorIds:
             if reference == operator.get("ref"):
@@ -346,6 +467,13 @@ class ModernWarfare:
             "emerald": "WEAPON/TRACER_EMERALD",
             "amethyst": "WEAPON/TRACER_AMETHYST",
             "cherryBlossom": "WEAPON/TRACER_CHERRY_BLOSSOM",
+            "ice": "WEAPON/TRACER_ICE",
+            "rainbow": "WEAPON/TRACER_RAINBOW",
+            "black": "WEAPON/TRACER_BLACK",
+            "crimsonRonin": "WEAPON/TRACER_CRIMSON_RONIN",
+            "acid": "WEAPON/TRACER_ACID",
+            "tailLightTracerAkira": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_AKIRA",
+            "flightTrailRainbow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_RAINBOW",
         }
 
         return self.localize.get(attributes.get(reference))
@@ -369,3 +497,32 @@ class ModernWarfare:
         }
 
         return self.localize.get(categories.get(reference))
+
+    def GetPlatformExclusivity(self: Any, reference: str) -> str:
+        """
+        Get the name of the specified platform.
+
+        Defined in ui/utils/lui.lua
+        """
+
+        if reference is None:
+            return
+        elif reference == "pc":
+            return "battlenet"
+        elif reference == "sy":
+            return "playstation"
+        elif reference == "ms":
+            return "xbox"
+
+    def GetTitleAvailability(self: Any, id: int) -> Dict[str, bool]:
+        """TODO"""
+
+        for item in self.itemSources:
+            if id == item.get("marketPlaceID"):
+                return {
+                    "coldWar": bool(item.get("equippableT9")),
+                    "warzone": bool(item.get("equippableWZ")),
+                    "modernWarfare": bool(item.get("equippableIW8MP")),
+                }
+
+        return {"coldWar": False, "warzone": True, "modernWarfare": True}

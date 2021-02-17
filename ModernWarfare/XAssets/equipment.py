@@ -40,7 +40,7 @@ class EquipmentTable(TypedDict):
     progressionImage: str
     survivalCost: int
     disableAutoUnlockPrivate: int  # bool
-    unknown5: str # Not defined in luashared/csvutils.lua
+    unknown5: str  # Not defined in luashared/csvutils.lua
     showInSurvival: int  # bool
 
 
@@ -78,6 +78,9 @@ class Equipment:
                     "description": None,
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "image": None,
                     "icon": None,
                     "video": None,

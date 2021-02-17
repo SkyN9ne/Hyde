@@ -20,6 +20,8 @@ class BattlePassSeason(TypedDict):
     billboardImage: str
     isShowcased: str  # array of ints (bools)
     isPromoted: str  # array of ints (bools)
+    splitTierIDs: str  # array of ints
+    splitTierBillboardImages: str  # array of strings
 
 
 class BattlePassIDs(TypedDict):
@@ -48,6 +50,7 @@ class BattlePassIDs(TypedDict):
     unknown1: str
     unknown2: str
     seasonFile: str
+    sku: int
 
 
 class BattlePasses:
@@ -77,7 +80,9 @@ class BattlePasses:
 
             season: int = int(path.split("season")[1].split(".")[0])
 
-            battlePasses.append({"name": f"Season {season}", "items": []})
+            battlePasses.append(
+                {"name": self.localize.get(f"SEASONS/SEASON_{season}"), "items": []}
+            )
 
             for entry in table:
                 items: List[int] = Utility.GetCSVArray(self, entry.get("lootId"), int)
@@ -130,9 +135,13 @@ class BattlePassItems:
             items.append(
                 {
                     "id": entry.get("id"),
+                    "sku": entry.get("sku"),
                     "name": self.localize.get(entry.get("name")),
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "image": "battlepass_emblem",
                     "background": "ui_loot_bg_battlepass",
                 }

@@ -50,6 +50,9 @@ class SpecialItems:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "image": entry.get("image"),
                     "background": "ui_loot_bg_generic",
                 }

@@ -32,6 +32,7 @@ class CallingCardsTable(TypedDict):
     unlockType: str
     unlockString: str
     availableOffline: int  # bool
+    platformExclusiveType: str
 
 
 class CallingCards:
@@ -68,6 +69,10 @@ class CallingCards:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                 }
@@ -91,6 +96,9 @@ class CallingCards:
                     continue
 
                 card["name"] = self.localize.get(entry.get("name"))
+                card["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
                 card["hidden"] = bool(entry.get("hideInUI"))
                 card["image"] = entry.get("image")
 

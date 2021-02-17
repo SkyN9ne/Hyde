@@ -56,6 +56,9 @@ class Consumables:
                     "description": self.localize.get(entry.get("duration")),
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "image": None
                     if ((i := entry.get("image")) == "placeholder_x") or (i == "white")
                     else i,

@@ -47,6 +47,9 @@ class OperatorSkins(TypedDict):
     unknown4: str
     bannerImage: str
     unknown5: str
+    unknown6: str
+    unknown7: str
+    platformExclusiveType: str
 
 
 class Skins:
@@ -86,6 +89,10 @@ class Skins:
                     "season": self.ModernWarfare.GetLootSeason(
                         entry.get("unlockMethod")
                     ),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "operatorId": None,
                     "operatorAltId": None,
                     "image": None,
@@ -113,6 +120,9 @@ class Skins:
                 skin["name"] = self.localize.get(entry.get("name"))
                 skin["description"] = self.localize.get(entry.get("desc"))
                 skin["image"] = entry.get("lootImage")
+                skin["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
 
                 if bool(entry.get("isGlobal")) is True:
                     skin["operatorId"] = self.ModernWarfare.GetOperatorID(

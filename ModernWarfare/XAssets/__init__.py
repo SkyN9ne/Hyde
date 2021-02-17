@@ -7,6 +7,7 @@ from .challenges import (
     MasteryChallenges,
     MiscellaneousChallenges,
     OfficerChallenges,
+    SeasonalChallenges,
     TurboChallenges,
     WeaponUnlockChallenges,
     WeeklyChallengesBR,
@@ -16,6 +17,7 @@ from .charms import Charms
 from .consumables import Consumables
 from .emblems import Emblems
 from .equipment import Equipment
+from .events import SeasonalEvents
 from .executions import Executions
 from .features import Features
 from .gameTypes import GameTypes
@@ -26,11 +28,13 @@ from .maps import Maps
 from .missions import MissionItems, Missions
 from .operators import Operators
 from .quips import Quips
+from .reticles import Reticles
 from .skins import Skins
 from .specialItems import SpecialItems
 from .splashes import Splashes
 from .sprays import Sprays
 from .stickers import Stickers
+from .unlockItems import UnlockItemsT9
 from .vehicleCamos import VehicleCamos
 from .vehicleHorns import VehicleHorns
 from .vehicles import Vehicles

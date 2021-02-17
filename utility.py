@@ -199,11 +199,27 @@ class Utility:
             "/",
             "<",
             ">",
+            "=",
+            "?"
         ]
         output: str = input
 
         for i in colors:
-            output: str = output.replace(f"^{i}", "")
+            output = output.replace(f"^{i}", "")
+
+        return output
+
+    def StripButtonCodes(self: Any, input: str) -> str:
+        """Replace all Call of Duty button codes from the provided string."""
+
+        buttons: List[Dict[str, str]] = [
+            {"code": "[{ONFOOT:+breath_sprint;+holdbreath}]", "literal": "button"},
+            {"code": "[{ui_alt2}]", "literal": "button"},
+        ]
+        output: str = input
+
+        for button in buttons:
+            output = output.replace(button.get("code"), button.get("literal"))
 
         return output
 
@@ -280,6 +296,8 @@ class Utility:
                     )
 
                     shutil.rmtree(f"{self.eImages}/temp/", ignore_errors=True)
+
+                    log.info(f"Animated {filename} ({columns}x{rows})")
 
                     return True
                 else:

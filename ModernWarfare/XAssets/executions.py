@@ -40,6 +40,8 @@ class ExecutionTable(TypedDict):
     unknown3: str
     lootImage: str
     pet: str
+    unknown4: str
+    battlepassImage: str
 
 
 class Executions:
@@ -76,12 +78,14 @@ class Executions:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "operatorId": None,
                     "operatorAltId": None,
                     "pet": None,
                     "image": None,
                     "background": "ui_loot_bg_execution",
-                    "video": None,
                 }
             )
 
@@ -109,6 +113,5 @@ class Executions:
                 execution["operatorAltId"] = entry.get("operatorRef")
                 execution["pet"] = entry.get("pet")
                 execution["image"] = entry.get("lootImage")
-                execution["video"] = entry.get("videoPreview")
 
         return executions

@@ -69,6 +69,9 @@ class Quips:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "operatorId": None,
                     "operatorAltId": None,
                     "image": None,

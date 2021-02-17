@@ -152,3 +152,6 @@ ffmpeg.exe
 
 # Miscellaneous / Unused
 /challenges.py
+
+# Not for public release
+BlackOpsColdWar/

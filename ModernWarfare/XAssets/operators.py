@@ -40,6 +40,8 @@ class OperatorsTable(TypedDict):
     bioImage: str
     fullName: str
     hiddenWhenLocked: int  # bool
+    canBotsUse: int  # bool
+    challengeUnlockDescOverride: str
 
 
 class FactionTable(TypedDict):
@@ -140,6 +142,9 @@ class Operators:
                     "season": self.ModernWarfare.GetLootSeason(
                         entry.get("license") * 1000
                     ),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "faction": None,
                     "branch": None,
                     "branchIcon": None,
@@ -199,6 +204,11 @@ class Operators:
                     },
                 ]
 
+                # Workaround to solve for placeholder Operator descriptions.
+                if entry.get("background") == "LUA_MENU/PRICE_BACKGROUND":
+                    if operator.get("altId") != "price_western":
+                        operator["description"] = None
+
         return operators
 
     def FactionTable(
@@ -231,7 +241,15 @@ class Operators:
                     else:
                         operator["faction"] = None
                 else:
-                    operator["faction"] = self.localize.get(entry.get("superFactionName"))
+                    operator["faction"] = self.localize.get(
+                        entry.get("superFactionName")
+                    )
+
+                # Workaround to solve for Black Ops Cold War Operators who do not
+                # utilize a Faction Branch.
+                if operator["faction"] == operator["branch"]:
+                    operator["branch"] = None
+                    operator["branchIcon"] = None
 
         return operators
 

@@ -77,6 +77,9 @@ class VehicleHorns:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "unlock": None,
                     "hidden": None,
                     "image": "ui_vehicle_horn",
@@ -103,7 +106,9 @@ class VehicleHorns:
 
                 horn["name"] = self.localize.get(entry.get("name"))
                 horn["flavor"] = self.localize.get(entry.get("flavorText"))
-                horn["unlock"] = self.localize.get(entry.get("unlockText"))
+                horn["unlock"] = self.localize.get(entry.get("unlockText")).replace(
+                    "&&1 ", ""
+                )
                 horn["hidden"] = bool(entry.get("hideInUI"))
 
         return horns

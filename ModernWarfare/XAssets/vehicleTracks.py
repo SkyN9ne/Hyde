@@ -70,6 +70,9 @@ class VehicleTracks:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "unlock": None,
                     "hidden": None,
                     "image": "ui_vehicle_battle_track",
@@ -95,7 +98,9 @@ class VehicleTracks:
                     continue
 
                 track["name"] = self.localize.get(entry.get("name"))
-                track["unlock"] = self.localize.get(entry.get("unlockText"))
+                track["unlock"] = self.localize.get(entry.get("unlockText")).replace(
+                    "&&1 ", ""
+                )
                 track["hidden"] = bool(entry.get("hideInUI"))
 
         return tracks

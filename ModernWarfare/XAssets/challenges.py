@@ -108,6 +108,31 @@ class MiscChallenges(TypedDict):
     sound: str
 
 
+class T9SeasonalChallenges(TypedDict):
+    """Structure of mp/t9_seasonal_challenges.csv"""
+
+    challengeID: int
+    challengeRef: str
+    seasonNum: int
+    seasonChallengeIndex: int
+    title: str
+    description: str
+    levelGate: int
+    isMastery: int  # bool
+    isT9Exclusive: int  # bool
+    tier1Quantity: int
+    tier1XP: int
+    tier2Quantity: int
+    tier2XP: int
+    tier3Quantity: int
+    tier3XP: int
+    tier4Quantity: int
+    tier4XP: int
+    tier5Quantity: int
+    tier5XP: int
+    callingCard: str
+
+
 class OfficerChallenges:
     """Officer Challenge XAssets."""
 
@@ -456,5 +481,85 @@ class MiscellaneousChallenges:
                     ],
                 }
             )
+
+        return challenges
+
+
+class SeasonalChallenges:
+    """Seasonal Challenges XAssets."""
+
+    def Compile(self: Any) -> None:
+        """Compile the Seasonal Challenges XAssets."""
+
+        challenges: List[Dict[str, Any]] = []
+
+        challenges = SeasonalChallenges.Table(self, challenges)
+
+        Utility.WriteFile(self, f"{self.eXAssets}/seasonalChallenges.json", challenges)
+
+        log.info(f"Compiled {len(challenges):,} Seasonal Challenges")
+
+    def Table(self: Any, challenges: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Compile the mp/t9_seasonal_challenges.csv XAsset."""
+
+        table: List[Dict[str, Any]] = Utility.ReadCSV(
+            self, f"{self.iXAssets}/mp/t9_seasonal_challenges.csv", T9SeasonalChallenges
+        )
+
+        if table is None:
+            return challenges
+
+        for entry in table:
+            desc = self.localize.get(entry.get("description"))
+
+            challenges.append(
+                {
+                    "id": entry.get("challengeID"),
+                    "altId": entry.get("challengeRef"),
+                    "name": self.localize.get(entry.get("title")),
+                    "description": desc,
+                    "season": entry.get("seasonNum"),
+                    "image": entry.get("callingCard"),
+                    "levelGate": entry.get("levelGate"),
+                    "t9Exclusive": bool(entry.get("isT9Exclusive")),
+                    "mastery": bool(entry.get("isMastery")),
+                    "tiers": [],
+                }
+            )
+
+            if (amount := entry.get("tier1Quantity")) is not None:
+                challenges[-1]["tiers"].append(
+                    {"amount": amount, "xp": entry.get("tier1XP")}
+                )
+
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
+
+            if (amount := entry.get("tier2Quantity")) is not None:
+                challenges[-1]["tiers"].append(
+                    {"amount": amount, "xp": entry.get("tier2XP")}
+                )
+
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
+
+            if (amount := entry.get("tier3Quantity")) is not None:
+                challenges[-1]["tiers"].append(
+                    {"amount": amount, "xp": entry.get("tier3XP")}
+                )
+
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
+
+            if (amount := entry.get("tier4Quantity")) is not None:
+                challenges[-1]["tiers"].append(
+                    {"amount": amount, "xp": entry.get("tier4XP")}
+                )
+
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
+
+            if (amount := entry.get("tier5Quantity")) is not None:
+                challenges[-1]["tiers"].append(
+                    {"amount": amount, "xp": entry.get("tier5XP")}
+                )
+
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
 
         return challenges

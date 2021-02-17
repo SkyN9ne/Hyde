@@ -31,6 +31,8 @@ class WeaponStickerTable(TypedDict):
     unlockType: int
     unlockString: str
     availableOffline: int  # bool
+    platformExclusiveType: str
+    storeFlavor: str
 
 
 class Stickers:
@@ -64,9 +66,14 @@ class Stickers:
                     "id": entry.get("id"),
                     "altId": entry.get("ref"),
                     "name": None,
+                    "flavor": None,
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                     "background": "ui_loot_bg_sticker",
@@ -91,6 +98,10 @@ class Stickers:
                     continue
 
                 sticker["name"] = self.localize.get(entry.get("name"))
+                sticker["flavor"] = self.localize.get(entry.get("storeFlavor"))
+                sticker["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
                 sticker["hidden"] = bool(entry.get("hideInUI"))
                 sticker["image"] = entry.get("image")
 

@@ -63,6 +63,7 @@ class MissionIDs(TypedDict):
     missionImage: str
     missionName: str
     unknown1: str
+    operatorRef: str
 
 
 class Missions:

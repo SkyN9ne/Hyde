@@ -17,6 +17,7 @@ class ItemSourceTable(TypedDict):
     equippableWZ: int  # bool
     equippableT9: int  # bool
     equippableS4: int  # bool
+    lookupType: str
 
 
 class ItemSources:

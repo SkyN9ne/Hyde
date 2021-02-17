@@ -44,6 +44,9 @@ class AccessoryTable(TypedDict):
     unknown3: str  # Not defined in luashared/csvutils.lua
     unknown4: str  # Not defined in luashared/csvutils.lua
     disablePreview: str  # int (bool)
+    platformExclusiveType: str
+    isT9Exclusive: int  # bool
+    storeFlavor: str
 
 
 class Accessories:
@@ -78,12 +81,14 @@ class Accessories:
                     "altId": entry.get("ref"),
                     "name": None,
                     "description": None,
-                    "flavor": self.localize.get(
-                        "STORE_FLAVOR/" + entry.get("ref").upper() + "_FLAVOR"
-                    ),
+                    "flavor": None,
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                 }
@@ -108,7 +113,11 @@ class Accessories:
 
                 accessory["name"] = self.localize.get(entry.get("name"))
                 accessory["description"] = self.localize.get(entry.get("description"))
+                accessory["flavor"] = self.localize.get(entry.get("storeFlavor"))
                 accessory["image"] = entry.get("lootImage")
+                accessory["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
                 accessory["hidden"] = bool(entry.get("hideInUI"))
 
         return accessories

@@ -30,6 +30,8 @@ class WeaponCharmTable(TypedDict):
     unlockType: str
     unlockString: str
     availableOffline: int  # bool
+    platformExclusiveType: str
+    storeFlavor: str
 
 
 class Charms:
@@ -63,12 +65,14 @@ class Charms:
                     "id": entry.get("id"),
                     "altId": entry.get("ref"),
                     "name": None,
-                    "flavor": self.localize.get(
-                        "STORE_FLAVOR/" + entry.get("ref").upper() + "_FLAVOR"
-                    ),
+                    "flavor": None,
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                     "background": "ui_loot_bg_charm",
@@ -93,6 +97,10 @@ class Charms:
                     continue
 
                 charm["name"] = self.localize.get(entry.get("name"))
+                charm["flavor"] = self.localize.get(entry.get("storeFlavor"))
+                charm["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
                 charm["hidden"] = bool(entry.get("hideInUI"))
                 charm["image"] = entry.get("image")
 

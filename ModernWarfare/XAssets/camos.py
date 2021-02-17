@@ -31,6 +31,7 @@ class CamoTable(TypedDict):
     name: str
     image: str
     availableOffline: int  # bool
+    platformExclusiveType: str
 
 
 class Camos:
@@ -68,6 +69,10 @@ class Camos:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                 }
@@ -93,6 +98,9 @@ class Camos:
                 camo["name"] = self.localize.get(entry.get("name"))
                 camo["category"] = self.ModernWarfare.GetCamoCategory(
                     entry.get("category")
+                )
+                camo["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
                 )
                 camo["hidden"] = bool(entry.get("hidden"))
                 camo["image"] = entry.get("image")

@@ -57,6 +57,9 @@ class Features:
                     "description": self.localize.get(entry.get("desc")),
                     "type": self.ModernWarfare.GetLootType(entry.get("index")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("index")
+                    ),
                     "image": None if (i := entry.get("hudImage")) == "white" else i,
                     "background": "ui_loot_bg_generic",
                 }

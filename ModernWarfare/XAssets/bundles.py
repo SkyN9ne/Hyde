@@ -59,6 +59,20 @@ class BundleIDs(TypedDict):
     collectionImage: str
     collectionPreviewImage: str
     featureText: str
+    unknown1: str  # Not defined in luashared/csvutils.csv
+    unknown2: str  # Not defined in luashared/csvutils.csv
+    unknown3: str  # Not defined in luashared/csvutils.csv
+    unknown4: str  # Not defined in luashared/csvutils.csv
+    unknown5: str  # Not defined in luashared/csvutils.csv
+    unknown6: str  # Not defined in luashared/csvutils.csv
+    unknown7: str  # Not defined in luashared/csvutils.csv
+    unknown8: str  # Not defined in luashared/csvutils.csv
+    unknown9: str  # Not defined in luashared/csvutils.csv
+    unknown10: str  # Not defined in luashared/csvutils.csv
+    unknown11: str  # Not defined in luashared/csvutils.csv
+    unknown12: str  # Not defined in luashared/csvutils.csv
+    unknown13: str  # Not defined in luashared/csvutils.csv
+    game: str
 
 
 class Bundles:
@@ -95,9 +109,15 @@ class Bundles:
                         "description": self.localize.get(entry.get("description")),
                         "flavor": self.localize.get(entry.get("flavorText")),
                         "feature": self.localize.get(entry.get("featureText")),
-                        "type": self.localize.get(entry.get("bundleType")),
+                        "type": self.localize.get(
+                            entry.get("bundleType"),
+                            self.localize.get("MENU/BUNDLE_TYPE_VARIETY"),
+                        ),
                         "season": self.ModernWarfare.GetLootSeason(
                             entry.get("license")
+                        ),
+                        "available": self.ModernWarfare.GetTitleAvailability(
+                            entry.get("id")
                         ),
                         "billboard": None
                         if (i := entry.get("image")) == "placeholder_x"
@@ -106,8 +126,11 @@ class Bundles:
                         if (i := entry.get("titleImage")) == "placeholder_x"
                         else i,
                         "price": None
-                        if ((p := entry.get("currencyAmount")) == 99) or (p == 10000)
-                        else p,
+                        if entry.get("currencyID") != 20
+                        else entry.get("currencyAmount"),
+                        "salePrice": None
+                        if entry.get("currencyID") != 20
+                        else entry.get("saleCurrencyAmount"),
                         "items": [],
                         "hiddenItems": [],
                     }
@@ -118,7 +141,10 @@ class Bundles:
                     continue
 
                 bundles[-1]["items"].append(
-                    {"id": item, "type": self.ModernWarfare.GetLootType(item),}
+                    {
+                        "id": item,
+                        "type": self.ModernWarfare.GetLootType(item),
+                    }
                 )
 
             for i in range(1, entry.get("numHiddenItems") + 1):
@@ -126,7 +152,10 @@ class Bundles:
                     continue
 
                 bundles[-1]["hiddenItems"].append(
-                    {"id": item, "type": self.ModernWarfare.GetLootType(item),}
+                    {
+                        "id": item,
+                        "type": self.ModernWarfare.GetLootType(item),
+                    }
                 )
 
         return bundles

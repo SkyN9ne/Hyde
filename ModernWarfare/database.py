@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from utility import Utility
 
@@ -24,9 +24,21 @@ class Database:
         DBOperators.Compile(self)
         DBWeapons.Compile(self)
 
-        Utility.WriteFile(
-            self, f"{self.eDatabase}/_images.txt", ",".join(list(set(self.dbImages)))
-        )
+        imgChunk: str = ""
+        imgWhole: str = ""
+
+        for image in set(self.dbImages):
+            if (len(imgChunk) + len(f"{image},")) < 30000:
+                imgChunk += f"{image},"
+            else:
+                # Don't ask
+                imgWhole += f"{imgChunk}\n\n\n\n\n\n\n\n\n\n"
+                imgChunk = f"{image},"
+
+        if (len(imgWhole) == 0) and (len(imgChunk) > 0):
+            imgWhole = imgChunk
+
+        Utility.WriteFile(self, f"{self.eDatabase}/_images.txt", imgWhole)
 
         log.info(f"Compiled {self.count:,} Database Items")
 
@@ -82,6 +94,8 @@ class DBBundles:
                 continue
             elif bundle.get("name") is None:
                 continue
+            elif bundle.get("type") is None:
+                continue
             elif (b := bundle.get("billboard")) is None:
                 continue
             elif (l := bundle.get("logo")) is None:
@@ -113,8 +127,16 @@ class DBBundles:
                 bundle.pop("feature")
             if bundle.get("season") is None:
                 bundle.pop("season")
+            if bundle.get("salePrice") is None:
+                bundle.pop("salePrice")
             if bundle.get("name") == bundle.get("flavor"):
                 bundle.pop("flavor")
+            if bundle.get("available") == {
+                "coldWar": False,
+                "warzone": True,
+                "modernWarfare": True,
+            }:
+                bundle.pop("available", None)
 
             bundle["slug"] = Utility.Sluggify(self, bundle.get("name"))
 
@@ -155,9 +177,11 @@ class DBLoot:
             "missionItems",
             "operatorQuips",
             "operatorSkins",
+            "reticles",
             "specialItems",
             "sprays",
             "stickers",
+            "unlockItemsT9",
             "vehicleCamos",
             "vehicleHorns",
             "vehicleTracks",
@@ -173,6 +197,8 @@ class DBLoot:
                     continue
                 elif item.get("name") is None:
                     continue
+                elif item.get("type") is None:
+                    continue
                 elif (i := item.get("image")) is None:
                     continue
 
@@ -186,8 +212,8 @@ class DBLoot:
                 item.pop("category", None)
                 item.pop("operatorAltId", None)
                 item.pop("pet", None)
-                item.pop("video", None)
                 item.pop("unlock", None)
+                item.pop("sku", None)
 
                 if item.get("description") is None:
                     item.pop("description", None)
@@ -195,8 +221,18 @@ class DBLoot:
                     item.pop("flavor", None)
                 if item.get("season") is None:
                     item.pop("season", None)
+                if item.get("season") == "Unreleased":
+                    item.pop("season", None)
                 if item.get("attribute") is None:
                     item.pop("attribute", None)
+                if item.get("exclusive") is None:
+                    item.pop("exclusive", None)
+                if item.get("available") == {
+                    "coldWar": False,
+                    "warzone": True,
+                    "modernWarfare": True,
+                }:
+                    item.pop("available", None)
 
                 if (iType := item.get("type")) == "Calling Card":
                     item["animated"] = Utility.AnimateSprite(
@@ -220,6 +256,8 @@ class DBLoot:
                     continue
                 elif variant.get("name") is None:
                     continue
+                elif variant.get("type") is None:
+                    continue
                 elif (i := variant.get("image")) is None:
                     continue
 
@@ -238,6 +276,14 @@ class DBLoot:
                     variant.pop("tracers")
                 if variant.get("dismemberment") is None:
                     variant.pop("dismemberment")
+                if variant.get("season") == "Unreleased":
+                    variant.pop("season", None)
+                if variant.get("available") == {
+                    "coldWar": False,
+                    "warzone": True,
+                    "modernWarfare": True,
+                }:
+                    variant.pop("available", None)
 
                 variant["class"] = weapon.get("class")
                 variant["baseId"] = weapon.get("id")
@@ -284,6 +330,8 @@ class DBOperators:
                 continue
             elif operator.get("name") is None:
                 continue
+            elif operator.get("type") is None:
+                continue
             elif (i := operator.get("image")) is None:
                 continue
 
@@ -291,21 +339,6 @@ class DBOperators:
 
             if Utility.FileExists(self, f"{self.iImages}/{i}.png") is False:
                 continue
-
-            operator.pop("altId")
-            operator.pop("type")
-            operator.pop("rarity")
-            operator.pop("branchIcon")
-            operator.pop("thumbprint")
-            operator.pop("launchOperator")
-            operator.pop("video")
-            operator.pop("hidden")
-            operator.pop("billets")
-
-            if operator.get("season") is None:
-                operator.pop("season")
-            if operator.get("description") is None:
-                operator.pop("description")
 
             operator["skins"] = []
             operator["executions"] = []
@@ -329,9 +362,13 @@ class DBOperators:
 
                 if skinOpId == operator.get("id"):
                     operator["skins"].append(skinId)
-                elif skinOpId == 29999:
+                elif (skinOpId == 29999) and (
+                    operator.get("altId").startswith("t9") is False
+                ):
                     operator["skins"].append(skinId)
-                elif skinOpId == 29998:
+                elif (skinOpId == 29998) and (
+                    operator.get("altId").startswith("t9") is False
+                ):
                     if operator.get("launchOperator") is True:
                         operator["skins"].append(skinId)
 
@@ -352,8 +389,13 @@ class DBOperators:
 
                 if exOpId == operator.get("id"):
                     operator["executions"].append(exId)
-                elif exOpId == 29999:
+                elif (exOpId == 29999) and (
+                    operator.get("altId").startswith("t9") is False
+                ):
                     operator["executions"].append(exId)
+                elif exOpId == 29997:
+                    if operator.get("altId").startswith("t9") is True:
+                        operator["executions"].append(exId)
 
             for quip in Utility.SortList(self, quips, "name", key2="rarity"):
                 if (quipId := quip.get("id")) is None:
@@ -372,8 +414,33 @@ class DBOperators:
 
                 if quipOpId == operator.get("id"):
                     operator["quips"].append(quipId)
-                elif quipOpId == 29999:
+                elif (quipOpId == 29999) and (
+                    operator.get("altId").startswith("t9") is False
+                ):
                     operator["quips"].append(quipId)
+
+            operator.pop("altId")
+            operator.pop("type")
+            operator.pop("rarity")
+            operator.pop("branchIcon")
+            operator.pop("thumbprint")
+            operator.pop("launchOperator")
+            operator.pop("video")
+            operator.pop("hidden")
+            operator.pop("billets")
+
+            if operator.get("season") is None:
+                operator.pop("season")
+            if operator.get("description") is None:
+                operator.pop("description")
+            if operator.get("branch") is None:
+                operator.pop("branch")
+            if operator.get("available") == {
+                "coldWar": False,
+                "warzone": True,
+                "modernWarfare": True,
+            }:
+                operator.pop("available", None)
 
             dbOperators.append(operator)
             self.count += 1
@@ -407,6 +474,8 @@ class DBWeapons:
                 continue
             if weapon.get("name") is None:
                 continue
+            if weapon.get("type") is None:
+                continue
             if (i := weapon.get("image")) is None:
                 continue
             if (ico := weapon.get("icon")) is None:
@@ -416,7 +485,17 @@ class DBWeapons:
             self.dbImages.append(ico)
 
             if Utility.FileExists(self, f"{self.iImages}/{i}.png") is False:
-                continue
+                backup: Optional[str]
+
+                try:
+                    backup = weapon["variants"][0].get("image")
+                except IndexError:
+                    backup = None
+
+                if Utility.FileExists(self, f"{self.iImages}/{backup}.png") is True:
+                    weapon["image"] = backup
+                else:
+                    weapon["image"] = ico
             elif Utility.FileExists(self, f"{self.iImages}/{ico}.png") is False:
                 continue
 
@@ -428,6 +507,8 @@ class DBWeapons:
                 if variant.get("id") is None:
                     continue
                 elif variant.get("name") is None:
+                    continue
+                elif variant.get("type") is None:
                     continue
                 elif variant.get("image") is None:
                     continue
@@ -456,6 +537,12 @@ class DBWeapons:
 
                 if attachment.get("description") is None:
                     attachment.pop("description")
+                if attachment.get("available") == {
+                    "coldWar": False,
+                    "warzone": True,
+                    "modernWarfare": True,
+                }:
+                    attachment.pop("available", None)
 
                 attachments.append(attachment)
 
@@ -465,8 +552,14 @@ class DBWeapons:
 
             if weapon.get("description") is None:
                 weapon.pop("description")
-            if weapon.get("season") is None:
+            if ((s := weapon.get("season")) is None) or (s == "Unreleased"):
                 weapon.pop("season")
+            if weapon.get("available") == {
+                "coldWar": False,
+                "warzone": True,
+                "modernWarfare": True,
+            }:
+                weapon.pop("available", None)
 
             weapon["slug"] = Utility.Sluggify(self, weapon.get("name"))
 

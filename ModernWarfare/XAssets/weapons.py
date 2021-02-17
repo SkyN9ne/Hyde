@@ -26,7 +26,7 @@ class StatsTable(TypedDict):
     operatorOverrideAsset: str
     attachVariantCategoryBlacklist: str
     hiddenWhenLocked: int  # bool
-    unknown3: str  # Not defined in luashared/csvutils.lua
+    UIShowDvar: str
     unknown4: str  # Not defined in luashared/csvutils.lua
     unknown5: str  # Not defined in luashared/csvutils.lua
     unknown6: str  # Not defined in luashared/csvutils.lua
@@ -117,7 +117,7 @@ class WeaponProgression(TypedDict):
     """Structure of mp/gunsmith/*_*_progression.csv"""
 
     level: int
-    lootID: int
+    lootID: str  # Array of ints
     challengeID: int
     challengeRef: str
     bucketID: int
@@ -153,7 +153,7 @@ class AttachmentTable(TypedDict):
     desc: str
     unknown2: str  # Not defined in luashared/csvutils.lua
     blockedCategory: str
-    unknown3: str  # Not defined in luashared/csvutils.lua
+    doesNotUseCustomReticles: str  # bool
     reticles: str
     perk: str
     slot: str
@@ -218,6 +218,7 @@ class Weapons:
                     "type": None,
                     "rarity": None,
                     "season": None,
+                    "available": {},
                     "class": self.ModernWarfare.GetWeaponClass(entry.get("classRef")),
                     "image": None,
                     "icon": None
@@ -283,6 +284,7 @@ class Weapons:
                     weapon["season"] = self.ModernWarfare.GetLootSeason(
                         entry.get("license")
                     )
+                    weapon["available"] = self.ModernWarfare.GetTitleAvailability(entry.get("index"))
                 else:
                     weapon["variants"].append(
                         {
@@ -296,6 +298,9 @@ class Weapons:
                             ),
                             "season": self.ModernWarfare.GetLootSeason(
                                 entry.get("license")
+                            ),
+                            "available": self.ModernWarfare.GetTitleAvailability(
+                                entry.get("index")
                             ),
                             "tracers": None,
                             "dismemberment": None,
@@ -338,8 +343,10 @@ class Weapons:
                         if variant.get("altId") != entry.get("ref"):
                             continue
 
-                        flavor: str = variant.get("altId").replace("iw8_", "").replace(
-                            "variant_", ""
+                        flavor: str = (
+                            variant.get("altId")
+                            .replace("iw8_", "")
+                            .replace("variant_", "")
                         )
 
                         variant["name"] = self.localize.get(entry.get("name"))
@@ -389,7 +396,7 @@ class Weapons:
 
                     weapon["attachments"].append(
                         {
-                            "id": entry.get("lootID"),
+                            "id": Utility.GetCSVArray(self, entry.get("lootID"), int)[0],
                             "altId": None,
                             "name": None,
                             "description": None,

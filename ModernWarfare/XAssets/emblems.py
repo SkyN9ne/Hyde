@@ -33,6 +33,7 @@ class EmblemTable(TypedDict):
     unlockString: str
     availableOffline: int  # bool
     officerSeason: int
+    platformExclusiveType: str
 
 
 class Emblems:
@@ -69,6 +70,10 @@ class Emblems:
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("rarity")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "exclusive": None,
+                    "available": self.ModernWarfare.GetTitleAvailability(
+                        entry.get("id")
+                    ),
                     "hidden": None,
                     "image": None,
                     "background": "ui_loot_bg_emblem",
@@ -93,6 +98,9 @@ class Emblems:
                     continue
 
                 emblem["name"] = self.localize.get(entry.get("name"))
+                emblem["exclusive"] = self.ModernWarfare.GetPlatformExclusivity(
+                    entry.get("platformExclusiveType")
+                )
                 emblem["hidden"] = bool(entry.get("hideInUI"))
                 emblem["image"] = entry.get("image")
 
