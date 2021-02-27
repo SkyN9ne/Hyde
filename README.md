@@ -52,6 +52,8 @@ python hyde.py
 -   Missions
 -   Officer Challenges
 -   Operators
+-   Playlist Events
+-   Progression Rewards
 -   Quips
 -   Skins
 -   Special Items

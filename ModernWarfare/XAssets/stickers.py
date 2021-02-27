@@ -23,7 +23,7 @@ class WeaponStickerTable(TypedDict):
 
     index: int
     ref: str
-    netConstID: int
+    unknown1: str # Previously defined in luashared/csvutils.lua as netConstID
     name: str
     image: str
     category: str

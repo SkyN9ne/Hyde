@@ -133,6 +133,14 @@ class T9SeasonalChallenges(TypedDict):
     callingCard: str
 
 
+class T9SeasonalProgressionBlueprintRewards(TypedDict):
+    """Structure of mp/progression/t9_seasonal_progression_blueprint_rewards.csv"""
+
+    seasonDispNum: int
+    seasonRank: int
+    blueprintID: int
+
+
 class OfficerChallenges:
     """Officer Challenge XAssets."""
 
@@ -482,6 +490,12 @@ class MiscellaneousChallenges:
                 }
             )
 
+            if desc is None:
+                continue
+
+            if (amount := entry.get("amount")) is not None:
+                challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
+
         return challenges
 
 
@@ -563,3 +577,46 @@ class SeasonalChallenges:
                 challenges[-1]["description"] = desc.replace("&&1", f"{amount:,}")
 
         return challenges
+
+
+class ProgressionRewards:
+    """Progression Rewards XAssets."""
+
+    def Compile(self: Any) -> None:
+        """Compile the Progression Rewards XAssets."""
+
+        rewards: List[Dict[str, Any]] = []
+
+        rewards = ProgressionRewards.Table(self, rewards)
+
+        Utility.WriteFile(self, f"{self.eXAssets}/progressionRewards.json", rewards)
+
+        log.info(f"Compiled {len(rewards):,} Progression Rewards")
+
+    def Table(self: Any, rewards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Compile the mp/progression/t9_seasonal_progression_blueprint_rewards.csv XAsset."""
+
+        table: List[Dict[str, Any]] = Utility.ReadCSV(
+            self,
+            f"{self.iXAssets}/mp/progression/t9_seasonal_progression_blueprint_rewards.csv",
+            T9SeasonalProgressionBlueprintRewards,
+        )
+
+        if table is None:
+            return rewards
+
+        for entry in table:
+            rewards.append(
+                {
+                    "season": entry.get("seasonDispNum"),
+                    "rank": entry.get("seasonRank"),
+                    "rewards": [
+                        {
+                            "id": (bId := entry.get("blueprintID")),
+                            "type": self.ModernWarfare.GetLootType(bId),
+                        }
+                    ],
+                }
+            )
+
+        return rewards

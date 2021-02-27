@@ -4,6 +4,7 @@ from typing import Any, Dict, Optional
 
 import coloredlogs
 
+from BlackOpsColdWar import BlackOpsColdWar
 from ModernWarfare import ModernWarfare
 from utility import Utility
 
@@ -30,6 +31,9 @@ class Hyde:
 
         log.info("Loaded configuration")
 
+        if self.config["BlackOpsColdWar"]["enabled"] is True:
+            self.BlackOpsColdWar = BlackOpsColdWar(self.config)
+            self.BlackOpsColdWar.Compile()
         if self.config["ModernWarfare"]["enabled"] is True:
             self.ModernWarfare = ModernWarfare(self.config)
             self.ModernWarfare.Compile()

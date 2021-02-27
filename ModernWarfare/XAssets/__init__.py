@@ -7,6 +7,7 @@ from .challenges import (
     MasteryChallenges,
     MiscellaneousChallenges,
     OfficerChallenges,
+    ProgressionRewards,
     SeasonalChallenges,
     TurboChallenges,
     WeaponUnlockChallenges,
@@ -17,7 +18,7 @@ from .charms import Charms
 from .consumables import Consumables
 from .emblems import Emblems
 from .equipment import Equipment
-from .events import SeasonalEvents
+from .events import PlaylistEvents, SeasonalEvents
 from .executions import Executions
 from .features import Features
 from .gameTypes import GameTypes

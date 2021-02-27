@@ -51,6 +51,7 @@ class BattlePassIDs(TypedDict):
     unknown2: str
     seasonFile: str
     sku: int
+    saleSku: int
 
 
 class BattlePasses:

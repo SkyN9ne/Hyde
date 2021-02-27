@@ -138,6 +138,9 @@ class DBBundles:
             }:
                 bundle.pop("available", None)
 
+            if Utility.AnimateSprite(self, b, [(1920, 580)]) is True:
+                bundle["animated"] = True
+
             bundle["slug"] = Utility.Sluggify(self, bundle.get("name"))
 
             dbBundles.append(bundle)
@@ -235,11 +238,16 @@ class DBLoot:
                     item.pop("available", None)
 
                 if (iType := item.get("type")) == "Calling Card":
-                    item["animated"] = Utility.AnimateSprite(
-                        self, i, [(512, 128), (512, 136), (960, 240)]
-                    )
+                    if (
+                        Utility.AnimateSprite(
+                            self, i, [(512, 128), (512, 136), (960, 240)]
+                        )
+                        is True
+                    ):
+                        item["animated"] = True
                 elif iType == "Emblem":
-                    item["animated"] = Utility.AnimateSprite(self, i, [(256, 256)])
+                    if Utility.AnimateSprite(self, i, [(256, 256)]) is True:
+                        item["animated"] = True
 
                 item["slug"] = Utility.Sluggify(self, item.get("name"))
 
@@ -288,6 +296,9 @@ class DBLoot:
                 variant["class"] = weapon.get("class")
                 variant["baseId"] = weapon.get("id")
                 variant["slug"] = Utility.Sluggify(self, variant.get("name"))
+
+                if Utility.AnimateSprite(self, i, [(300, 400)]) is True:
+                    variant["animated"] = True
 
                 dbLoot.append(variant)
                 self.count += 1

@@ -28,6 +28,8 @@ from .XAssets import (
     Missions,
     OfficerChallenges,
     Operators,
+    PlaylistEvents,
+    ProgressionRewards,
     Quips,
     Reticles,
     SeasonalChallenges,
@@ -211,6 +213,8 @@ class ModernWarfare:
         Missions.Compile(self)
         OfficerChallenges.Compile(self)
         Operators.Compile(self)
+        PlaylistEvents.Compile(self)
+        ProgressionRewards.Compile(self)
         Quips.Compile(self)
         Reticles.Compile(self)
         SeasonalChallenges.Compile(self)
@@ -362,6 +366,8 @@ class ModernWarfare:
                     return self.localize.get("LOOT_MP/FEATURE")
                 elif refType == "vehicleskin":
                     return self.localize.get("LOOT_MP/VEHICLE_SKIN")
+                elif refType == "bundle":
+                    return self.localize.get("MENU/BUNDLE_TYPE_VARIETY")
                 elif refType == "placeholder":
                     return
                 else:

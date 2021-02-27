@@ -96,11 +96,14 @@
         "ST_CARD_",
         "SPRAY ",
         "STICKER ",
+        " STICKER ",
         "STICKER NAME",
         "Placeholder ",
         "( Temporary - ",
         "loot item name",
-        "lorem ipsum"
+        "lorem ipsum",
+        "VEH_",
+        "t9_"
     ],
     "ends": [
         "_0",
