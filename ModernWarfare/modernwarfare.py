@@ -460,9 +460,11 @@ class ModernWarfare:
             "orange": "WEAPON/TRACER_ORANGE",
             "yellow": "WEAPON/TRACER_YELLOW",
             "soul": "WEAPON/TRACER_SOUL",
+            "purpleGreen": "WEAPON/TRACER_PURPLE_GREEN",
             "standardDis": "WEAPON/DISMEMBERMENT",
             "cryoDis": "WEAPON/CRYO_DISMEMBERMENT",
             "goldDis": "WEAPON/DISMEMBERMENT_GOLD",
+            "electricDis": "WEAPON/DISMEMBERMENT_ELECTRIC",
             "tailLightTracerRed": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_RED",
             "flightTrailStandard": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_STANDARD",
             "flightTrailShadow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_SHADOW",
@@ -521,7 +523,7 @@ class ModernWarfare:
             return "xbox"
 
     def GetTitleAvailability(self: Any, id: int) -> Dict[str, bool]:
-        """TODO"""
+        """Get the title availability for the specified item."""
 
         for item in self.itemSources:
             if id == item.get("marketPlaceID"):

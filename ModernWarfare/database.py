@@ -137,6 +137,12 @@ class DBBundles:
                 "modernWarfare": True,
             }:
                 bundle.pop("available", None)
+            if bundle.get("available") == {
+                "coldWar": False,
+                "warzone": False,
+                "modernWarfare": False,
+            }:
+                bundle.pop("available", None)
 
             if Utility.AnimateSprite(self, b, [(1920, 580)]) is True:
                 bundle["animated"] = True
@@ -217,6 +223,7 @@ class DBLoot:
                 item.pop("pet", None)
                 item.pop("unlock", None)
                 item.pop("sku", None)
+                item.pop("rewards", None)
 
                 if item.get("description") is None:
                     item.pop("description", None)
@@ -234,6 +241,12 @@ class DBLoot:
                     "coldWar": False,
                     "warzone": True,
                     "modernWarfare": True,
+                }:
+                    item.pop("available", None)
+                if item.get("available") == {
+                    "coldWar": False,
+                    "warzone": False,
+                    "modernWarfare": False,
                 }:
                     item.pop("available", None)
 
@@ -290,6 +303,12 @@ class DBLoot:
                     "coldWar": False,
                     "warzone": True,
                     "modernWarfare": True,
+                }:
+                    variant.pop("available", None)
+                if variant.get("available") == {
+                    "coldWar": False,
+                    "warzone": False,
+                    "modernWarfare": False,
                 }:
                     variant.pop("available", None)
 
@@ -438,7 +457,6 @@ class DBOperators:
             operator.pop("launchOperator")
             operator.pop("video")
             operator.pop("hidden")
-            operator.pop("billets")
 
             if operator.get("season") is None:
                 operator.pop("season")
@@ -450,6 +468,12 @@ class DBOperators:
                 "coldWar": False,
                 "warzone": True,
                 "modernWarfare": True,
+            }:
+                operator.pop("available", None)
+            if operator.get("available") == {
+                "coldWar": False,
+                "warzone": False,
+                "modernWarfare": False,
             }:
                 operator.pop("available", None)
 
@@ -554,6 +578,12 @@ class DBWeapons:
                     "modernWarfare": True,
                 }:
                     attachment.pop("available", None)
+                if attachment.get("available") == {
+                    "coldWar": False,
+                    "warzone": False,
+                    "modernWarfare": False,
+                }:
+                    attachment.pop("available", None)
 
                 attachments.append(attachment)
 
@@ -569,6 +599,12 @@ class DBWeapons:
                 "coldWar": False,
                 "warzone": True,
                 "modernWarfare": True,
+            }:
+                weapon.pop("available", None)
+            if weapon.get("available") == {
+                "coldWar": False,
+                "warzone": False,
+                "modernWarfare": False,
             }:
                 weapon.pop("available", None)
 

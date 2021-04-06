@@ -25,7 +25,7 @@ class Utility:
 
         try:
             with open(path, "r", encoding="utf-8") as file:
-                if path.rsplit(".")[1] == "json":
+                if path.split(".")[-1] == "json":
                     return json.loads(file.read())
                 else:
                     return file.read()
