@@ -224,6 +224,7 @@ class Weapons:
                     "icon": None
                     if (i := entry.get("progressionImage")) == "placeholder_x"
                     else i,
+                    "background": "ui_loot_bg_generic",
                     "statBars": [
                         {
                             "label": self.localize.get("LUA_MENU/WEAPSTATS_ACCURACY"),

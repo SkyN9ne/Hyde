@@ -106,20 +106,3 @@ class Reticles:
                 reticle["image"] = entry.get("image")
 
         return reticles
-
-    # index: int
-    # ref: str
-    # name: str
-    # desc: str
-    # image: str
-    # unknown1: int  
-    # hideInUI: int  # bool
-    # category: str
-    # unknown2: str 
-    # unlockType: str
-    # unlockString: str
-    # availableOffline: int  # bool
-    # altImage: str
-    # flipHybridAltImage: str
-    # battlepassImage: str
-    # unlockChallengeRef: str

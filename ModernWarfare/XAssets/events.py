@@ -22,6 +22,7 @@ class SeasonalEvent(TypedDict):
     backendChallengeRef: str
     targetProgress: int
     gameSource: str
+    billboardImage: str
 
 
 class BRPlaylistEvents(TypedDict):

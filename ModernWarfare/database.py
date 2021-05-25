@@ -511,28 +511,10 @@ class DBWeapons:
                 continue
             if weapon.get("type") is None:
                 continue
-            if (i := weapon.get("image")) is None:
-                continue
             if (ico := weapon.get("icon")) is None:
                 continue
 
-            self.dbImages.append(i)
             self.dbImages.append(ico)
-
-            if Utility.FileExists(self, f"{self.iImages}/{i}.png") is False:
-                backup: Optional[str]
-
-                try:
-                    backup = weapon["variants"][0].get("image")
-                except IndexError:
-                    backup = None
-
-                if Utility.FileExists(self, f"{self.iImages}/{backup}.png") is True:
-                    weapon["image"] = backup
-                else:
-                    weapon["image"] = ico
-            elif Utility.FileExists(self, f"{self.iImages}/{ico}.png") is False:
-                continue
 
             variants: List[int] = []
 
@@ -552,44 +534,8 @@ class DBWeapons:
 
             weapon["variants"] = variants
 
-            attachments: List[int] = []
-
-            for attachment in weapon.get("attachments"):
-                if attachment.get("id") is None:
-                    continue
-                elif attachment.get("name") is None:
-                    continue
-                elif (i := attachment.get("image")) is None:
-                    continue
-
-                self.dbImages.append(i)
-
-                if Utility.FileExists(self, f"{self.iImages}/{i}.png") is False:
-                    continue
-
-                attachment.pop("altId")
-                attachment.pop("unlock")
-
-                if attachment.get("description") is None:
-                    attachment.pop("description")
-                if attachment.get("available") == {
-                    "coldWar": False,
-                    "warzone": True,
-                    "modernWarfare": True,
-                }:
-                    attachment.pop("available", None)
-                if attachment.get("available") == {
-                    "coldWar": False,
-                    "warzone": False,
-                    "modernWarfare": False,
-                }:
-                    attachment.pop("available", None)
-
-                attachments.append(attachment)
-
-            weapon["attachments"] = Utility.SortList(
-                self, attachments, "type", key2="name"
-            )
+            weapon.pop("attachments")
+            weapon.pop("image")
 
             if weapon.get("description") is None:
                 weapon.pop("description")

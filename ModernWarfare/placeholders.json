@@ -6,7 +6,8 @@
         "DESC TODO",
         "CHALLENGE NAME MISSING",
         "Needs Description",
-        "None"
+        "None",
+        "PlaceHolder"
     ],
     "begins": [
         "EMBLEM 0",
@@ -19,6 +20,7 @@
         "EMBLEM 7",
         "EMBLEM 8",
         "EMBLEM 9",
+        "(empty ",
         "CARD 0",
         "CARD 1",
         "CARD 2",
@@ -103,7 +105,8 @@
         "loot item name",
         "lorem ipsum",
         "VEH_",
-        "t9_"
+        "t9_",
+        "mp_western_"
     ],
     "ends": [
         "_0",
@@ -121,6 +124,7 @@
         "_GLOBAL",
         " description",
         "NAME MISSING",
-        " Text..."
+        " Text...",
+        "_PLACEHOLDER"
     ]
 }

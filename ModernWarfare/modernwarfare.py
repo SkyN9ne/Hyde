@@ -348,6 +348,8 @@ class ModernWarfare:
                     return self.localize.get("LOOT_MP/VEHICLE_HORN")
                 elif refType == "feature":
                     return self.localize.get("LOOT_MP/FEATURE")
+                elif refType == "gestures":
+                    return self.localize.get("LOOT_MP/GESTURES")
                 elif refType == "weapon_attachment":
                     return self.localize.get("LOOT_MP/ATTACHMENT")
                 elif refType == "perk":
@@ -370,6 +372,8 @@ class ModernWarfare:
                     return self.localize.get("MENU/BUNDLE_TYPE_VARIETY")
                 elif refType == "placeholder":
                     return
+                elif refType == "arcadegame":
+                    return self.localize.get("LOOT_MP/ARCADE_GAME")
                 else:
                     log.warning(
                         f"Found unknown Loot Type; ID: {id}, refType: {refType}"
@@ -443,6 +447,9 @@ class ModernWarfare:
         Defined in ui/utils/weaponutils.lua and ui/utils/vehicleutils.lua
         """
 
+        if reference is None:
+            return None
+
         attributes: Dict[str, str] = {
             "red": "WEAPON/TRACER_RED",
             "blue": "WEAPON/TRACER_BLUE",
@@ -461,10 +468,18 @@ class ModernWarfare:
             "yellow": "WEAPON/TRACER_YELLOW",
             "soul": "WEAPON/TRACER_SOUL",
             "purpleGreen": "WEAPON/TRACER_PURPLE_GREEN",
+            "goldPurple": "WEAPON/TRACER_GOLD_PURPLE",
+            "bluePurple": "WEAPON/TRACER_BLUE_PURPLE",
+            "yellowGreen": "WEAPON/TRACER_YELLOW_GREEN",
+            "orangeGreen": "WEAPON/TRACER_ORANGE_GREEN",
             "standardDis": "WEAPON/DISMEMBERMENT",
             "cryoDis": "WEAPON/CRYO_DISMEMBERMENT",
             "goldDis": "WEAPON/DISMEMBERMENT_GOLD",
             "electricDis": "WEAPON/DISMEMBERMENT_ELECTRIC",
+            "acidDis": "WEAPON/DISMEMBERMENT_ACID",
+            "runicDis": "WEAPON/DISMEMBERMENT_RUNIC",
+            "shatterBlast": "WEAPON/DISMEMBERMENT_SHATTERBLAST",
+            "radioactive": "WEAPON/DISMEMBERMENT_RADIOACTIVE",
             "tailLightTracerRed": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_RED",
             "flightTrailStandard": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_STANDARD",
             "flightTrailShadow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_SHADOW",
@@ -484,6 +499,9 @@ class ModernWarfare:
             "flightTrailRainbow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_RAINBOW",
         }
 
+        if attributes.get(reference) is None:
+            log.warning(f"Found unknown attribute; ref: {reference}")
+
         return self.localize.get(attributes.get(reference))
 
     def GetGameTypeCategory(self: Any, reference: str) -> Optional[str]:
@@ -492,6 +510,9 @@ class ModernWarfare:
 
         Defined in ui/utils/mplobbyutils.lua and ui/frontend/mp/gamemodes.lua
         """
+
+        if reference is None:
+            return None
 
         categories: Dict[str, str] = {
             "PrivateTournament": "LUA_MENU/TOURNAMENT",
@@ -503,6 +524,9 @@ class ModernWarfare:
             "Standard": "LUA_MENU/STANDARD_MODES",
             "Alternate": "LUA_MENU/ALTERNATE_MODES",
         }
+
+        if categories.get(reference) is None:
+            log.warning(f"Found unknown game type category; ref: {reference}")
 
         return self.localize.get(categories.get(reference))
 
@@ -521,12 +545,18 @@ class ModernWarfare:
             return "playstation"
         elif reference == "ms":
             return "xbox"
+        else:
+            log.warning(f"Found unknown exclusivity platform; ref: {reference}")
 
     def GetTitleAvailability(self: Any, id: int) -> Dict[str, bool]:
         """Get the title availability for the specified item."""
 
         for item in self.itemSources:
             if id == item.get("marketPlaceID"):
+                # Temporary (IYKYK)
+                if item.get("equippableS4") is True:
+                    log.warning(f"Found item with S4 availability; ID: {id}")
+
                 return {
                     "coldWar": bool(item.get("equippableT9")),
                     "warzone": bool(item.get("equippableWZ")),

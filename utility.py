@@ -200,7 +200,11 @@ class Utility:
             "<",
             ">",
             "=",
-            "?"
+            "?",
+            "&",
+            "(",
+            ")",
+            "L"
         ]
         output: str = input
 
@@ -215,6 +219,9 @@ class Utility:
         buttons: List[Dict[str, str]] = [
             {"code": "[{ONFOOT:+breath_sprint;+holdbreath}]", "literal": "button"},
             {"code": "[{ui_alt2}]", "literal": "button"},
+            {"code": "[{+frag}]", "literal": "button"},
+            {"code": "[{+activate}]", "literal": "button"},
+            {"code": "[{^BBUTTON_SELECTCHOICE+gostand}]", "literal": "button"},
         ]
         output: str = input
 
