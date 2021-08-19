@@ -48,15 +48,20 @@ class Utility:
                 if skip > 0:
                     file: List[str] = file.readlines()[skip:]
 
-                for row in csv.DictReader(file, fieldnames=list(fields)):
-                    entries.append(
-                        {
-                            key: None
-                            if ((v := value) == "") or (v is None)
-                            else fields[key](value)
-                            for key, value in islice(row.items(), 0, len(list(fields)))
-                        }
-                    )
+                try:
+                    for row in csv.DictReader(file, fieldnames=list(fields)):
+                        entries.append(
+                            {
+                                key: None
+                                if ((v := value) == "") or (v is None)
+                                else fields[key](value)
+                                for key, value in islice(
+                                    row.items(), 0, len(list(fields))
+                                )
+                            }
+                        )
+                except Exception as e:
+                    log.warning(f"Failed to read row in file {path}, {e}")
         except Exception as e:
             log.error(f"Failed to read file {path}, {e}")
 
@@ -204,7 +209,7 @@ class Utility:
             "&",
             "(",
             ")",
-            "L"
+            "L",
         ]
         output: str = input
 

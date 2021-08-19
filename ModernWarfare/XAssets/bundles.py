@@ -73,6 +73,7 @@ class BundleIDs(TypedDict):
     unknown12: str  # Not defined in luashared/csvutils.csv
     unknown13: str  # Not defined in luashared/csvutils.csv
     game: str
+    giftable: int  # bool
 
 
 class Bundles:
@@ -131,6 +132,7 @@ class Bundles:
                         "salePrice": None
                         if entry.get("currencyID") != 20
                         else entry.get("saleCurrencyAmount"),
+                        "giftable": Utility.GetStringBool(self, entry.get("giftable")),
                         "items": [],
                         "hiddenItems": [],
                     }

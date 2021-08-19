@@ -37,6 +37,8 @@ class VehicleHornsTable(TypedDict):
     littleBirdAliasUI: str
     tacRoverAlias: str
     tacRoverAliasUI: str
+    motorcycleAlias: str
+    motorcycleAliasUI: str
     lootImage: str
     hideInUI: int  # bool
     unlockText: str

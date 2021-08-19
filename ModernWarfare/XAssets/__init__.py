@@ -25,6 +25,7 @@ from .gameTypes import GameTypes
 from .gestures import Gestures
 from .itemSources import ItemSources
 from .killstreaks import Killstreaks
+from .kiosks import KioskBR, KioskBRTruck
 from .maps import Maps
 from .missions import MissionItems, Missions
 from .operators import Operators

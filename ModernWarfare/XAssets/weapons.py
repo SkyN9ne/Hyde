@@ -82,6 +82,20 @@ class WeaponIDs(TypedDict):
     salvage: int
     license: int
     variantRef: str
+    unknown1: str
+    unknown2: str
+    unknown3: str
+    unknown4: str
+    unknown5: str
+    unknown6: str
+    unknown7: str
+    unknown8: str
+    unknown9: str
+    unknown10: str
+    unknown11: str
+    unknown12: str
+    unknown13: str
+    maxAttachments: str
 
 
 class WeaponVariants(TypedDict):

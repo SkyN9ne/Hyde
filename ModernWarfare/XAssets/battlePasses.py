@@ -82,7 +82,11 @@ class BattlePasses:
             season: int = int(path.split("season")[1].split(".")[0])
 
             battlePasses.append(
-                {"name": self.localize.get(f"SEASONS/SEASON_{season}"), "items": []}
+                {
+                    "name": self.localize.get(f"SEASONS/SEASON_{season}"),
+                    "value": season,
+                    "items": [],
+                }
             )
 
             for entry in table:
@@ -96,7 +100,7 @@ class BattlePasses:
                         {
                             "id": item,
                             "type": self.ModernWarfare.GetLootType(item),
-                            "tier": entry.get("level"),
+                            "tier": 0 if (t := entry.get("level")) == 999 else t,
                             "free": bool(entry.get("isFree")),
                             "codPoints": None
                             if (c := entry.get("codPoints")) == 0
@@ -104,6 +108,8 @@ class BattlePasses:
                             "billboard": billboard,
                         }
                     )
+
+        battlePasses = sorted(battlePasses, key=lambda k: k["value"])
 
         return battlePasses
 

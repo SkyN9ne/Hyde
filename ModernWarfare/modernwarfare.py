@@ -21,6 +21,8 @@ from .XAssets import (
     Gestures,
     ItemSources,
     Killstreaks,
+    KioskBR,
+    KioskBRTruck,
     Maps,
     MasteryChallenges,
     MiscellaneousChallenges,
@@ -206,6 +208,8 @@ class ModernWarfare:
         Gestures.Compile(self)
         ItemSources.Compile(self)
         Killstreaks.Compile(self)
+        KioskBR.Compile(self)
+        KioskBRTruck.Compile(self)
         Maps.Compile(self)
         MasteryChallenges.Compile(self)
         MiscellaneousChallenges.Compile(self)
@@ -472,6 +476,10 @@ class ModernWarfare:
             "bluePurple": "WEAPON/TRACER_BLUE_PURPLE",
             "yellowGreen": "WEAPON/TRACER_YELLOW_GREEN",
             "orangeGreen": "WEAPON/TRACER_ORANGE_GREEN",
+            "whitepink": "WEAPON/TRACER_WHITE_PINK",
+            "paintball": "WEAPON/TRACER_PAINTBALL",
+            "cyan": "WEAPON/TRACER_CYAN",
+            "purplecyan": "WEAPON/TRACER_PURPLE_CYAN",
             "standardDis": "WEAPON/DISMEMBERMENT",
             "cryoDis": "WEAPON/CRYO_DISMEMBERMENT",
             "goldDis": "WEAPON/DISMEMBERMENT_GOLD",
@@ -480,6 +488,9 @@ class ModernWarfare:
             "runicDis": "WEAPON/DISMEMBERMENT_RUNIC",
             "shatterBlast": "WEAPON/DISMEMBERMENT_SHATTERBLAST",
             "radioactive": "WEAPON/DISMEMBERMENT_RADIOACTIVE",
+            "fire": "WEAPON/DISMEMBERMENT_FIRE",
+            "fireworkDis": "WEAPON/DISMEMBERMENT_FIREWORK",
+            "sunburstDis": "WEAPON/DISMEMBERMENT_SUNBURST",
             "tailLightTracerRed": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_RED",
             "flightTrailStandard": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_STANDARD",
             "flightTrailShadow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_SHADOW",

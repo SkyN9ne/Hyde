@@ -41,6 +41,7 @@
         "Calling card 7",
         "Calling card 8",
         "Calling card 9",
+        "hudson_",
         "Spray 0",
         "Spray 1",
         "Spray 2",
@@ -70,6 +71,7 @@
         "BP_",
         "BUNDLE_DESCRIPTION_",
         "EMBLEM MC",
+        "EMBLEM T9",
         "EMBLEM_",
         "JEEP_",
         "KNIFE_",
@@ -120,11 +122,15 @@
         "_8",
         "_9",
         "_10",
+        " description",
         "_DESC",
         "_GLOBAL",
-        " description",
+        "_helmet",
         "NAME MISSING",
+        "_PLACEHOLDER",
+        "(Placeholder Title)",
+        "(Placeholder Description)",
         " Text...",
-        "_PLACEHOLDER"
+        "Stub Name"
     ]
 }

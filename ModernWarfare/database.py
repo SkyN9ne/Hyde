@@ -117,6 +117,7 @@ class DBBundles:
             bundle["items"] = items
 
             bundle.pop("altId")
+            bundle.pop("giftable")
             bundle.pop("hiddenItems")
 
             if bundle.get("description") is None:
@@ -208,6 +209,8 @@ class DBLoot:
                     continue
                 elif item.get("type") is None:
                     continue
+                elif item.get("rarity") is None:
+                    continue
                 elif (i := item.get("image")) is None:
                     continue
 
@@ -263,6 +266,9 @@ class DBLoot:
                         item["animated"] = True
 
                 item["slug"] = Utility.Sluggify(self, item.get("name"))
+
+                if item in dbLoot:
+                    continue
 
                 dbLoot.append(item)
                 self.count += 1
@@ -457,6 +463,7 @@ class DBOperators:
             operator.pop("launchOperator")
             operator.pop("video")
             operator.pop("hidden")
+            operator.pop("billets")
 
             if operator.get("season") is None:
                 operator.pop("season")
