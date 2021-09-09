@@ -62,8 +62,9 @@ class MissionIDs(TypedDict):
     operatorSkinID: int
     missionImage: str
     missionName: str
-    unknown1: str
+    missionRef: str
     operatorRef: str
+    operatorMissionItemID: int
 
 
 class Missions:
@@ -190,7 +191,7 @@ class MissionItems:
             items.append(
                 {
                     "id": entry.get("index"),
-                    "altId": entry.get("ref"),
+                    "altId": entry.get("missionRef"),
                     "name": self.localize.get(entry.get("missionName")),
                     "type": self.ModernWarfare.GetLootType(entry.get("index")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
@@ -199,10 +200,8 @@ class MissionItems:
                     "background": "ui_loot_bg_feature",
                     "rewards": [
                         {
-                            "id": entry.get("operatorSkinID"),
-                            "type": self.ModernWarfare.GetLootType(
-                                entry.get("operatorSkinID")
-                            ),
+                            "id": (lId := entry.get("operatorSkinID")),
+                            "type": self.ModernWarfare.GetLootType(lId),
                         }
                     ],
                 }

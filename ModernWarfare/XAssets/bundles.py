@@ -74,6 +74,10 @@ class BundleIDs(TypedDict):
     unknown13: str  # Not defined in luashared/csvutils.csv
     game: str
     giftable: int  # bool
+    hasOperatorMissions: int  # bool
+    mastercraft: int  # bool
+    reactive: int  # bool
+    ultraoutfit: int  # bool
 
 
 class Bundles:
@@ -127,12 +131,18 @@ class Bundles:
                         if (i := entry.get("titleImage")) == "placeholder_x"
                         else i,
                         "price": None
-                        if entry.get("currencyID") != 20
-                        else entry.get("currencyAmount"),
+                        if (entry.get("currencyID") != 20)
+                        or ((amnt := entry.get("currencyAmount")) == 9999)
+                        else amnt,
                         "salePrice": None
-                        if entry.get("currencyID") != 20
-                        else entry.get("saleCurrencyAmount"),
-                        "giftable": Utility.GetStringBool(self, entry.get("giftable")),
+                        if (entry.get("currencyID") != 20)
+                        or ((amnt := entry.get("saleCurrencyAmount")) == 9999)
+                        else amnt,
+                        "giftable": bool(entry.get("giftable")),
+                        "mission": bool(entry.get("hasOperatorMissions")),
+                        "mastercraft": bool(entry.get("mastercraft")),
+                        "reactive": bool(entry.get("reactive")),
+                        "ultraSkin": bool(entry.get("ultraoutfit")),
                         "items": [],
                         "hiddenItems": [],
                     }

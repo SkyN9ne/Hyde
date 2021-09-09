@@ -118,6 +118,10 @@ class DBBundles:
 
             bundle.pop("altId")
             bundle.pop("giftable")
+            bundle.pop("mission")
+            bundle.pop("mastercraft")
+            bundle.pop("reactive")
+            bundle.pop("ultraSkin")
             bundle.pop("hiddenItems")
 
             if bundle.get("description") is None:
@@ -541,6 +545,7 @@ class DBWeapons:
 
             weapon["variants"] = variants
 
+            weapon.pop("maxAttachments")
             weapon.pop("attachments")
             weapon.pop("image")
 

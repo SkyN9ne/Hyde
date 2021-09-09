@@ -119,6 +119,7 @@ class WeaponClassTable(TypedDict):
     attachCategoryWhitelist: str  # Array of strings
     hasVariants: int  # bool
     isWZOnly: int  # bool
+    extraAttachCategoryWhitelist: str  # Array of strings
 
 
 class AttachmentCategoryTable(TypedDict):
@@ -288,7 +289,7 @@ class ModernWarfare:
         return self.localize.get(f"LOOT_MP/QUALITY_{value}")
 
     def GetLootType(self: Any, id: int) -> Optional[str]:
-        """Get the loot type for the provided id."""
+        """Get the loot type for the provided ID."""
 
         if id is None:
             return
@@ -301,7 +302,7 @@ class ModernWarfare:
                 typeNameLoc: Optional[str] = loot.get("typeNameLoc")
 
                 if typeNameLoc == "LOOT_MP/PLACEHOLDER":
-                    break
+                    continue
 
                 return self.localize.get(typeNameLoc)
 
@@ -354,6 +355,8 @@ class ModernWarfare:
                     return self.localize.get("LOOT_MP/FEATURE")
                 elif refType == "gestures":
                     return self.localize.get("LOOT_MP/GESTURES")
+                elif refType == "mission":
+                    return self.localize.get("LOOT_MP/MISSION")
                 elif refType == "weapon_attachment":
                     return self.localize.get("LOOT_MP/ATTACHMENT")
                 elif refType == "perk":
@@ -379,9 +382,7 @@ class ModernWarfare:
                 elif refType == "arcadegame":
                     return self.localize.get("LOOT_MP/ARCADE_GAME")
                 else:
-                    log.warning(
-                        f"Found unknown Loot Type; ID: {id}, refType: {refType}"
-                    )
+                    log.warning(f"Unknown loot refType {refType} for ID {id}")
 
     def GetLootSeason(self: Any, license: int) -> Optional[str]:
         """Get the loot season for the provided value."""
@@ -480,6 +481,12 @@ class ModernWarfare:
             "paintball": "WEAPON/TRACER_PAINTBALL",
             "cyan": "WEAPON/TRACER_CYAN",
             "purplecyan": "WEAPON/TRACER_PURPLE_CYAN",
+            "bluered": "WEAPON/TRACER_BLUE_RED",
+            "greengold": "WEAPON/TRACER_GREEN_GOLD",
+            "numbers": "WEAPON/TRACER_NUMBERS",
+            "paintballalt01": "WEAPON/TRACER_PAINTBALL_ALT_01",
+            "paintballalt02": "WEAPON/TRACER_PAINTBALL_ALT_02",
+            "electricgold": "WEAPON/TRACER_ELECTRIC_GOLD",
             "standardDis": "WEAPON/DISMEMBERMENT",
             "cryoDis": "WEAPON/CRYO_DISMEMBERMENT",
             "goldDis": "WEAPON/DISMEMBERMENT_GOLD",
@@ -491,6 +498,9 @@ class ModernWarfare:
             "fire": "WEAPON/DISMEMBERMENT_FIRE",
             "fireworkDis": "WEAPON/DISMEMBERMENT_FIREWORK",
             "sunburstDis": "WEAPON/DISMEMBERMENT_SUNBURST",
+            "beerDis": "WEAPON/DISMEMBERMENT_BEER",
+            "electricgoldDis": "WEAPON/DISMEMBERMENT_ELECTRIC_GOLD",
+            "numbersdDis": "WEAPON/DISMEMBERMENT_NUMBERS",
             "tailLightTracerRed": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_RED",
             "flightTrailStandard": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_STANDARD",
             "flightTrailShadow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_SHADOW",
@@ -511,7 +521,7 @@ class ModernWarfare:
         }
 
         if attributes.get(reference) is None:
-            log.warning(f"Found unknown attribute; ref: {reference}")
+            log.warning(f"Unknown attribute for ref {reference}")
 
         return self.localize.get(attributes.get(reference))
 
@@ -537,7 +547,7 @@ class ModernWarfare:
         }
 
         if categories.get(reference) is None:
-            log.warning(f"Found unknown game type category; ref: {reference}")
+            log.warning(f"Unknown game type category for ref {reference}")
 
         return self.localize.get(categories.get(reference))
 
@@ -557,7 +567,7 @@ class ModernWarfare:
         elif reference == "ms":
             return "xbox"
         else:
-            log.warning(f"Found unknown exclusivity platform; ref: {reference}")
+            log.warning(f"Unknown exclusivity platform for ref {reference}")
 
     def GetTitleAvailability(self: Any, id: int) -> Dict[str, bool]:
         """Get the title availability for the specified item."""

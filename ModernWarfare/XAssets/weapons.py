@@ -27,7 +27,7 @@ class StatsTable(TypedDict):
     attachVariantCategoryBlacklist: str
     hiddenWhenLocked: int  # bool
     UIShowDvar: str
-    unknown4: str  # Not defined in luashared/csvutils.lua
+    maxAllowedAttachment: int
     unknown5: str  # Not defined in luashared/csvutils.lua
     unknown6: str  # Not defined in luashared/csvutils.lua
     unknown7: str  # Not defined in luashared/csvutils.lua
@@ -82,20 +82,6 @@ class WeaponIDs(TypedDict):
     salvage: int
     license: int
     variantRef: str
-    unknown1: str
-    unknown2: str
-    unknown3: str
-    unknown4: str
-    unknown5: str
-    unknown6: str
-    unknown7: str
-    unknown8: str
-    unknown9: str
-    unknown10: str
-    unknown11: str
-    unknown12: str
-    unknown13: str
-    maxAttachments: str
 
 
 class WeaponVariants(TypedDict):
@@ -125,6 +111,10 @@ class WeaponVariants(TypedDict):
     dismembermentEnabled: str  # Not present in all *_*_variants.csv's
     gunTableOverrideAsset: str  # Not present in all *_*_variants.csv's
     operatorOverrideAsset: str  # Not present in all *_*_variants.csv's
+    attributeIcon: str  # Not defined in luashared/csvutils.lua
+    attributeName: str  # Not defined in luashared/csvutils.lua
+    ammunition: str  # Not present in all *_*_variants.csv's
+    perk2: str  # Not present in all *_*_variants.csv's
 
 
 class WeaponProgression(TypedDict):
@@ -234,6 +224,7 @@ class Weapons:
                     "season": None,
                     "available": {},
                     "class": self.ModernWarfare.GetWeaponClass(entry.get("classRef")),
+                    "maxAttachments": entry.get("maxAllowedAttachment"),
                     "image": None,
                     "icon": None
                     if (i := entry.get("progressionImage")) == "placeholder_x"
@@ -299,7 +290,9 @@ class Weapons:
                     weapon["season"] = self.ModernWarfare.GetLootSeason(
                         entry.get("license")
                     )
-                    weapon["available"] = self.ModernWarfare.GetTitleAvailability(entry.get("index"))
+                    weapon["available"] = self.ModernWarfare.GetTitleAvailability(
+                        entry.get("index")
+                    )
                 else:
                     weapon["variants"].append(
                         {
@@ -411,7 +404,9 @@ class Weapons:
 
                     weapon["attachments"].append(
                         {
-                            "id": Utility.GetCSVArray(self, entry.get("lootID"), int)[0],
+                            "id": Utility.GetCSVArray(self, entry.get("lootID"), int)[
+                                0
+                            ],
                             "altId": None,
                             "name": None,
                             "description": None,

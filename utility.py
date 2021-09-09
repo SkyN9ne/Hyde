@@ -48,8 +48,8 @@ class Utility:
                 if skip > 0:
                     file: List[str] = file.readlines()[skip:]
 
-                try:
-                    for row in csv.DictReader(file, fieldnames=list(fields)):
+                for row in csv.DictReader(file, fieldnames=list(fields)):
+                    try:
                         entries.append(
                             {
                                 key: None
@@ -60,8 +60,8 @@ class Utility:
                                 )
                             }
                         )
-                except Exception as e:
-                    log.warning(f"Failed to read row in file {path}, {e}")
+                    except Exception as e:
+                        log.warning(f"Failed to read row in file {path}, {e}")
         except Exception as e:
             log.error(f"Failed to read file {path}, {e}")
 
@@ -210,6 +210,8 @@ class Utility:
             "(",
             ")",
             "L",
+            "'",
+            "-",
         ]
         output: str = input
 

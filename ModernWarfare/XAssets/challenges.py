@@ -26,7 +26,7 @@ class GunUnlockChallenges(TypedDict):
     name: str
     desc: str
     amount: int
-    unknown1: str  # Not defined in luashared/csvutils.lua
+    xp: int
     loot: int
 
 
@@ -227,7 +227,15 @@ class WeaponUnlockChallenges:
                     "description": self.localize.get(entry.get("desc")).replace(
                         "&&1", amount
                     ),
-                    "weaponId": entry.get("loot"),
+                    "rewards": [
+                        {
+                            "id": entry.get("loot"),
+                            "type": self.ModernWarfare.GetLootType(entry.get("loot")),
+                        },
+                        {
+                            "xp": entry.get("xp"),
+                        },
+                    ],
                 }
             )
 

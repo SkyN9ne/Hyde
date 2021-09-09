@@ -23,6 +23,8 @@ class SeasonalEvent(TypedDict):
     targetProgress: int
     gameSource: str
     billboardImage: str
+    challengeCompletedImage: str
+    shortDesc: str
 
 
 class BRPlaylistEvents(TypedDict):
@@ -69,6 +71,9 @@ class SeasonalEvents:
                     "id": entry.get("id"),
                     "altId": entry.get("challengeRef"),
                     "description": desc,
+                    "altDescription": self.localize.get(entry.get("shortDesc")),
+                    "image": entry.get("challengeCompletedImage"),
+                    "billboard": entry.get("billboardImage"),
                     "eventId": entry.get("eventID"),
                     "finalReward": bool(entry.get("isFinalReward")),
                     "introGift": bool(entry.get("isIntroGift")),

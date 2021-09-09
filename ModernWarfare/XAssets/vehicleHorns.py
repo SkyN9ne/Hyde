@@ -11,11 +11,11 @@ class VehicleHornIDs(TypedDict):
 
     id: int
     ref: str
-    rarity: int
-    price: int
-    salvage: int
-    license: int
-    premium: int  # bool
+    rarity: int  # Not defined in luashared/csvutils.lua
+    price: int  # Not defined in luashared/csvutils.lua
+    salvage: int  # Not defined in luashared/csvutils.lua
+    license: int  # Not defined in luashared/csvutils.lua
+    premium: int  # bool, not defined in luashared/csvutils.lua
 
 
 class VehicleHornsTable(TypedDict):
