@@ -27,6 +27,14 @@ python hyde.py
 
 ## Supported Titles
 
+### Call of Duty: Vanguard
+
+Currently not available for public release.
+
+### Call of Duty: Black Ops Cold War
+
+Currently not available for public release.
+
 ### Call of Duty: Modern Warfare
 
 -   Accessories
