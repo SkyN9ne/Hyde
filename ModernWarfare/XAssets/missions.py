@@ -98,6 +98,7 @@ class Missions:
             if entry.get("name") != last:
                 missions.append(
                     {
+                        "id": entry.get("id"),
                         "name": self.localize.get(entry.get("name")),
                         "description": self.localize.get(entry.get("detailDesc")),
                         "category": entry.get("category"),
@@ -190,12 +191,13 @@ class MissionItems:
         for entry in ids:
             items.append(
                 {
-                    "id": entry.get("index"),
+                    "id": entry.get("operatorMissionItemID"),
                     "altId": entry.get("missionRef"),
                     "name": self.localize.get(entry.get("missionName")),
-                    "type": self.ModernWarfare.GetLootType(entry.get("index")),
+                    "type": self.ModernWarfare.GetLootType(entry.get("operatorMissionItemID")),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
+                    "challengeId": entry.get("ref"),
                     "image": entry.get("missionImage"),
                     "background": "ui_loot_bg_feature",
                     "rewards": [

@@ -231,6 +231,7 @@ class DBLoot:
                 item.pop("unlock", None)
                 item.pop("sku", None)
                 item.pop("rewards", None)
+                item.pop("challengeId", None)
 
                 if item.get("description") is None:
                     item.pop("description", None)
