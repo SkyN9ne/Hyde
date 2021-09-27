@@ -159,10 +159,8 @@ class ModernWarfare:
         self.config: Dict[str, Any] = config.get("ModernWarfare")
         self.iXAssets: str = self.config["import"]["xassets"]
         self.iImages: str = self.config["import"]["images"]
-        self.iVideos: str = self.config["import"]["videos"]
         self.eXAssets: str = self.config["export"]["xassets"]
         self.eImages: str = self.config["export"]["images"]
-        self.eVideos: str = self.config["export"]["videos"]
         self.eDatabase: str = self.config["export"]["database"]
 
     def Compile(self: Any) -> None:
