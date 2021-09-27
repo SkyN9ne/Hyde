@@ -150,8 +150,6 @@ config.json
 # FFMPEG
 ffmpeg.exe
 
-# Miscellaneous / Unused
-/challenges.py
-
-# Not for public release
+# Currently not available for public release
 BlackOpsColdWar/
+Vanguard/

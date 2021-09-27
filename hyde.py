@@ -7,6 +7,7 @@ import coloredlogs
 from BlackOpsColdWar import BlackOpsColdWar
 from ModernWarfare import ModernWarfare
 from utility import Utility
+from Vanguard import Vanguard
 
 log: logging.Logger = logging.getLogger(__name__)
 coloredlogs.install(level="INFO", fmt="[%(asctime)s] %(message)s", datefmt="%I:%M:%S")
@@ -31,6 +32,9 @@ class Hyde:
 
         log.info("Loaded configuration")
 
+        if self.config["Vanguard"]["enabled"] is True:
+            self.Vanguard = Vanguard(self.config)
+            self.Vanguard.Compile()
         if self.config["BlackOpsColdWar"]["enabled"] is True:
             self.BlackOpsColdWar = BlackOpsColdWar(self.config)
             self.BlackOpsColdWar.Compile()
