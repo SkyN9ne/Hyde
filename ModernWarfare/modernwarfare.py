@@ -161,6 +161,7 @@ class ModernWarfare:
         self.iImages: str = self.config["import"]["images"]
         self.eXAssets: str = self.config["export"]["xassets"]
         self.eImages: str = self.config["export"]["images"]
+        self.eVideos: str = self.config["export"]["videos"]
         self.eDatabase: str = self.config["export"]["database"]
 
     def Compile(self: Any) -> None:
@@ -379,6 +380,8 @@ class ModernWarfare:
                     return
                 elif refType == "arcadegame":
                     return self.localize.get("LOOT_MP/ARCADE_GAME")
+                elif refType == "sprays":
+                    return self.localize.get("LOOT_MP/SPRAYS")
                 else:
                     log.warning(f"Unknown loot refType {refType} for ID {id}")
 
@@ -485,6 +488,9 @@ class ModernWarfare:
             "paintballalt01": "WEAPON/TRACER_PAINTBALL_ALT_01",
             "paintballalt02": "WEAPON/TRACER_PAINTBALL_ALT_02",
             "electricgold": "WEAPON/TRACER_ELECTRIC_GOLD",
+            "lazer": "WEAPON/TRACER_LAZER",
+            "redwhite": "WEAPON/TRACER_RED_WHITE",
+            "orangepurple": "WEAPON/TRACER_ORANGE_PURPLE",
             "standardDis": "WEAPON/DISMEMBERMENT",
             "cryoDis": "WEAPON/CRYO_DISMEMBERMENT",
             "goldDis": "WEAPON/DISMEMBERMENT_GOLD",
@@ -499,6 +505,9 @@ class ModernWarfare:
             "beerDis": "WEAPON/DISMEMBERMENT_BEER",
             "electricgoldDis": "WEAPON/DISMEMBERMENT_ELECTRIC_GOLD",
             "numbersdDis": "WEAPON/DISMEMBERMENT_NUMBERS",
+            "purpleelectric": "WEAPON/DISMEMBERMENT_PURPLE_ELECTRIC",
+            "purpleelectricDis": "WEAPON/DISMEMBERMENT_PURPLE_ELECTRIC",
+            "radioactiveblue": "WEAPON/DISMEMBERMENT_RADIOACTIVE_BLUE",
             "tailLightTracerRed": "VEHICLES/ATTRIBUTE_TAIL_LIGHT_TRACER_RED",
             "flightTrailStandard": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_STANDARD",
             "flightTrailShadow": "VEHICLES/ATTRIBUTE_FLIGHT_TRAIL_SHADOW",
@@ -542,6 +551,7 @@ class ModernWarfare:
             "Cwl": "LUA_MENU/CWL_MODES",
             "Standard": "LUA_MENU/STANDARD_MODES",
             "Alternate": "LUA_MENU/ALTERNATE_MODES",
+            "Rebirth": "LUA_MENU_CANTEEN/GAMEMODE_REBIRTH",
         }
 
         if categories.get(reference) is None:
@@ -572,14 +582,16 @@ class ModernWarfare:
 
         for item in self.itemSources:
             if id == item.get("marketPlaceID"):
-                # Temporary (IYKYK)
-                if item.get("equippableS4") is True:
-                    log.warning(f"Found item with S4 availability; ID: {id}")
-
                 return {
+                    "vanguard": bool(item.get("equippableS4")),
                     "coldWar": bool(item.get("equippableT9")),
                     "warzone": bool(item.get("equippableWZ")),
                     "modernWarfare": bool(item.get("equippableIW8MP")),
                 }
 
-        return {"coldWar": False, "warzone": True, "modernWarfare": True}
+        return {
+            "vanguard": False,
+            "coldWar": False,
+            "warzone": True,
+            "modernWarfare": True,
+        }

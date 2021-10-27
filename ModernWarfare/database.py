@@ -137,12 +137,14 @@ class DBBundles:
             if bundle.get("name") == bundle.get("flavor"):
                 bundle.pop("flavor")
             if bundle.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": True,
                 "modernWarfare": True,
             }:
                 bundle.pop("available", None)
             if bundle.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": False,
                 "modernWarfare": False,
@@ -246,12 +248,14 @@ class DBLoot:
                 if item.get("exclusive") is None:
                     item.pop("exclusive", None)
                 if item.get("available") == {
+                    "vanguard": False,
                     "coldWar": False,
                     "warzone": True,
                     "modernWarfare": True,
                 }:
                     item.pop("available", None)
                 if item.get("available") == {
+                    "vanguard": False,
                     "coldWar": False,
                     "warzone": False,
                     "modernWarfare": False,
@@ -311,12 +315,14 @@ class DBLoot:
                 if variant.get("season") == "Unreleased":
                     variant.pop("season", None)
                 if variant.get("available") == {
+                    "vanguard": False,
                     "coldWar": False,
                     "warzone": True,
                     "modernWarfare": True,
                 }:
                     variant.pop("available", None)
                 if variant.get("available") == {
+                    "vanguard": False,
                     "coldWar": False,
                     "warzone": False,
                     "modernWarfare": False,
@@ -477,12 +483,14 @@ class DBOperators:
             if operator.get("branch") is None:
                 operator.pop("branch")
             if operator.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": True,
                 "modernWarfare": True,
             }:
                 operator.pop("available", None)
             if operator.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": False,
                 "modernWarfare": False,
@@ -555,12 +563,14 @@ class DBWeapons:
             if ((s := weapon.get("season")) is None) or (s == "Unreleased"):
                 weapon.pop("season")
             if weapon.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": True,
                 "modernWarfare": True,
             }:
                 weapon.pop("available", None)
             if weapon.get("available") == {
+                "vanguard": False,
                 "coldWar": False,
                 "warzone": False,
                 "modernWarfare": False,

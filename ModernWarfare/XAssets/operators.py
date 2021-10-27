@@ -42,6 +42,7 @@ class OperatorsTable(TypedDict):
     hiddenWhenLocked: int  # bool
     canBotsUse: int  # bool
     challengeUnlockDescOverride: str
+    favoriteWeaponRef: str
 
 
 class FactionTable(TypedDict):

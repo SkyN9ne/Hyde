@@ -60,8 +60,8 @@ class Utility:
                                 )
                             }
                         )
-                    except Exception as e:
-                        log.warning(f"Failed to read row in file {path}, {e}")
+                    except Exception:
+                        continue
         except Exception as e:
             log.error(f"Failed to read file {path}, {e}")
 
@@ -212,11 +212,21 @@ class Utility:
             "L",
             "'",
             "-",
+            ":",
+            "$",
+            ",",
+            "@",
+            "B",
         ]
         output: str = input
 
         for i in colors:
             output = output.replace(f"^{i}", "")
+
+        if "^" in output:
+            modifier: str = output.split("^")[1][0]
+
+            log.warning(f"Potential color code found: ^{modifier}")
 
         return output
 
@@ -228,7 +238,7 @@ class Utility:
             {"code": "[{ui_alt2}]", "literal": "button"},
             {"code": "[{+frag}]", "literal": "button"},
             {"code": "[{+activate}]", "literal": "button"},
-            {"code": "[{^BBUTTON_SELECTCHOICE+gostand}]", "literal": "button"},
+            {"code": "[{BUTTON_SELECTCHOICE+gostand}]", "literal": "button"},
         ]
         output: str = input
 

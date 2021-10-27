@@ -108,7 +108,8 @@
         "lorem ipsum",
         "VEH_",
         "t9_",
-        "mp_western_"
+        "mp_western_",
+        "s4"
     ],
     "ends": [
         "_0",
@@ -131,6 +132,8 @@
         "(Placeholder Title)",
         "(Placeholder Description)",
         " Text...",
-        "Stub Name"
+        "Stub Name",
+        "Temp 2",
+        "Temp 2 Flavor"
     ]
 }
