@@ -102,8 +102,10 @@ class VehicleCamos:
 
                 camo["name"] = self.localize.get(entry.get("name"))
                 camo["flavor"] = self.localize.get(entry.get("flavorText"))
-                camo["unlock"] = self.localize.get(entry.get("unlockText")).replace(
-                    "&&1 ", ""
+                camo["unlock"] = (
+                    None
+                    if (loc := self.localize.get(entry.get("unlockText"))) is None
+                    else loc.replace("&&1 ", "")
                 )
                 camo["attribute"] = self.ModernWarfare.GetAttribute(
                     entry.get("specialAttribute")

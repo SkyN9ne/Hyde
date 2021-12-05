@@ -45,6 +45,7 @@ Currently not available for public release.
 -   Camos
 -   Charms
 -   Consumables
+-   DLC
 -   Emblems
 -   Equipment
 -   Executions

@@ -16,6 +16,7 @@ from .challenges import (
 )
 from .charms import Charms
 from .consumables import Consumables
+from .dlc import DLC
 from .emblems import Emblems
 from .equipment import Equipment
 from .events import PlaylistEvents, SeasonalEvents

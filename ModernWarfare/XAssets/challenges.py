@@ -224,9 +224,9 @@ class WeaponUnlockChallenges:
                     "id": entry.get("id"),
                     "altId": entry.get("ref"),
                     "name": self.localize.get(entry.get("name")),
-                    "description": self.localize.get(entry.get("desc")).replace(
-                        "&&1", amount
-                    ),
+                    "description": None
+                    if (loc := self.localize.get(entry.get("desc"))) is None
+                    else loc.replace("&&1", amount),
                     "rewards": [
                         {
                             "id": entry.get("loot"),

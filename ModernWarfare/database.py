@@ -88,6 +88,7 @@ class DBBundles:
         bundles: List[Dict[str, Any]] = Utility.ReadFile(
             self, f"{self.eXAssets}/bundles.json"
         )
+        dlc: List[Dict[str, Any]] = Utility.ReadFile(self, f"{self.eXAssets}/dlc.json")
 
         for bundle in bundles:
             if bundle.get("id") is None:
@@ -159,6 +160,57 @@ class DBBundles:
             dbBundles.append(bundle)
             self.count += 1
 
+        for entry in dlc:
+            if entry.get("altType") != "durable":
+                continue
+
+            if entry.get("id") is None:
+                continue
+            elif entry.get("name") is None:
+                continue
+            elif (b := entry.get("image")) is None:
+                continue
+
+            self.dbImages.append(b)
+
+            if Utility.FileExists(self, f"{self.iImages}/{b}.png") is False:
+                continue
+
+            items: List[int] = []
+
+            for item in entry.get("items"):
+                if item.get("type") == self.localize.get("LOOT_MP/OPERATOR"):
+                    continue
+
+                items.append((itemId := item.get("id")))
+
+                for bundle in bundles:
+                    if itemId == bundle.get("id"):
+                        items.remove(itemId)
+
+                        break
+
+            entry["items"] = items
+
+            entry.pop("altId", None)
+            entry.pop("altType", None)
+            entry.pop("storeIds", None)
+            entry.pop("image", None)
+
+            entry["billboard"] = b
+            entry["price"] = None
+
+            if entry.get("type") is None:
+                entry["type"] = self.localize.get("MENU/BUNDLE_TYPE_VARIETY")
+
+            if Utility.AnimateSprite(self, b, [(1920, 580)]) is True:
+                entry["animated"] = True
+
+            entry["slug"] = Utility.Sluggify(self, entry.get("name"))
+
+            dbBundles.append(entry)
+            self.count += 1
+
         Utility.WriteFile(
             self,
             f"{self.eDatabase}/bundles.json",
@@ -186,6 +238,7 @@ class DBLoot:
             "camos",
             "charms",
             "consumables",
+            "dlc",
             "emblems",
             "executions",
             "features",
@@ -220,12 +273,16 @@ class DBLoot:
                 elif (i := item.get("image")) is None:
                     continue
 
+                if (file == "dlc") and (item.get("altType") != "consumable"):
+                    continue
+
                 self.dbImages.append(i)
 
                 if Utility.FileExists(self, f"{self.iImages}/{i}.png") is False:
                     continue
 
                 item.pop("altId", None)
+                item.pop("altType", None)
                 item.pop("hidden", None)
                 item.pop("category", None)
                 item.pop("operatorAltId", None)
@@ -234,6 +291,8 @@ class DBLoot:
                 item.pop("sku", None)
                 item.pop("rewards", None)
                 item.pop("challengeId", None)
+                item.pop("storeIds", None)
+                item.pop("items", None)
 
                 if item.get("description") is None:
                     item.pop("description", None)

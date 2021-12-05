@@ -5,6 +5,7 @@ from utility import Utility
 
 from .database import Database
 from .XAssets import (
+    DLC,
     Accessories,
     BattlePasses,
     BattlePassItems,
@@ -192,6 +193,7 @@ class ModernWarfare:
             self, f"{self.iXAssets}/mp/camocategorytable.csv", CamoCategoryTable
         )
 
+        DLC.Compile(self)
         Accessories.Compile(self)
         BattlePasses.Compile(self)
         BattlePassItems.Compile(self)
