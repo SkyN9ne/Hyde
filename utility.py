@@ -183,7 +183,7 @@ class Utility:
 
         return datetime.utcfromtimestamp(timestamp).strftime("%A, %B %e, %Y %I:%M %p")
 
-    def StripColorCodes(self: Any, input: str) -> str:
+    def StripColorCodes(self: Any, input: str, quiet: bool = False) -> str:
         """Remove all Call of Duty color codes from the provided string."""
 
         colors: List[str] = [
@@ -224,9 +224,13 @@ class Utility:
             output = output.replace(f"^{i}", "")
 
         if "^" in output:
-            modifier: str = output.split("^")[1][0]
+            try:
+                modifier: str = output.split("^")[1][0]
 
-            log.warning(f"Potential color code found: ^{modifier}")
+                if quiet is False:
+                    log.warning(f"Potential color code found: ^{modifier}")
+            except Exception:
+                pass
 
         return output
 
