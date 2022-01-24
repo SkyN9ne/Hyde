@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, TypedDict
+from typing import Any, Dict, List, Optional, TypedDict
 
 from utility import Utility
 
@@ -131,6 +131,7 @@ class DLC:
             return dlc
 
         for entry in ids:
+            title: Optional[str] = self.localize.get(entry.get("title"))
             isCP: bool = bool(entry.get("isCODPoints", 0))
             amountCP: int = 0 if (amnt := entry.get("CPAmount")) is None else int(amnt)
 
@@ -138,11 +139,9 @@ class DLC:
                 {
                     "id": entry.get("id"),
                     "altId": entry.get("name"),
-                    "name": self.localize.get(entry.get("title"))
-                    if isCP is False
-                    else self.localize.get(entry.get("title")).replace(
-                        "&&1", f"{amountCP:,}"
-                    ),
+                    "name": title
+                    if (isCP is False) or (title is None)
+                    else title.replace("&&1", f"{amountCP:,}"),
                     "type": self.ModernWarfare.GetLootType(entry.get("id")),
                     "altType": entry.get("type"),
                     "image": entry.get("image"),

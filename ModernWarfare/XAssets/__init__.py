@@ -28,7 +28,7 @@ from .itemSources import ItemSources
 from .killstreaks import Killstreaks
 from .kiosks import KioskBR, KioskBRTruck
 from .maps import Maps
-from .missions import MissionItems, Missions
+from .missions import BRMissions, MissionItems, Missions
 from .operators import Operators
 from .quips import Quips
 from .reticles import Reticles

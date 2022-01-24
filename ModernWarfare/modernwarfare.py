@@ -9,6 +9,7 @@ from .XAssets import (
     Accessories,
     BattlePasses,
     BattlePassItems,
+    BRMissions,
     Bundles,
     CallingCards,
     Camos,
@@ -197,6 +198,7 @@ class ModernWarfare:
         Accessories.Compile(self)
         BattlePasses.Compile(self)
         BattlePassItems.Compile(self)
+        BRMissions.Compile(self)
         Bundles.Compile(self)
         CallingCards.Compile(self)
         Camos.Compile(self)
@@ -572,7 +574,7 @@ class ModernWarfare:
             return
         elif reference == "pc":
             return "battlenet"
-        elif reference == "sy":
+        elif (reference == "sy") or (reference == "sony"):
             return "playstation"
         elif reference == "ms":
             return "xbox"

@@ -217,6 +217,7 @@ class Utility:
             ",",
             "@",
             "B",
+            "R",
         ]
         output: str = input
 

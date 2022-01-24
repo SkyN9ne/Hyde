@@ -67,6 +67,29 @@ class MissionIDs(TypedDict):
     operatorMissionItemID: int
 
 
+class BRMissionsTable(TypedDict):
+    """Structure of mp/brmissions.csv"""
+
+    index: int
+    ref: str
+    title: str
+    description: str
+    descriptionParam: int
+    paramText: str
+    icon: str
+    reward: str
+    hasTimer: int  # bool
+    paramKey: str
+    useDescParamInParamText: int  # bool
+    lootRef: str
+    extraRewardText: str
+    mapKeyIcon: str
+    mapKeyTitle: str
+    aarIcon: str
+    overrideColor: str
+    altTrackerText: str
+
+
 class Missions:
     """Mission XAssets."""
 
@@ -194,7 +217,9 @@ class MissionItems:
                     "id": entry.get("operatorMissionItemID"),
                     "altId": entry.get("missionRef"),
                     "name": self.localize.get(entry.get("missionName")),
-                    "type": self.ModernWarfare.GetLootType(entry.get("operatorMissionItemID")),
+                    "type": self.ModernWarfare.GetLootType(
+                        entry.get("operatorMissionItemID")
+                    ),
                     "rarity": self.ModernWarfare.GetLootRarity(entry.get("quality")),
                     "season": self.ModernWarfare.GetLootSeason(entry.get("license")),
                     "challengeId": entry.get("ref"),
@@ -210,3 +235,46 @@ class MissionItems:
             )
 
         return items
+
+
+class BRMissions:
+    """BR Missions XAssets."""
+
+    def Compile(self: Any) -> None:
+        """Compile the BR Missions XAssets."""
+
+        missions: List[Dict[str, Any]] = []
+
+        missions = BRMissions.Table(self, missions)
+
+        Utility.WriteFile(self, f"{self.eXAssets}/brMissions.json", missions)
+
+        log.info(f"Compiled {len(missions):,} BR Missions")
+
+    def Table(self: Any, missions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Compile the mp/brmissions.csv XAsset."""
+
+        table: List[Dict[str, Any]] = Utility.ReadCSV(
+            self, f"{self.iXAssets}/mp/brmissions.csv", BRMissionsTable
+        )
+
+        if table is None:
+            return missions
+
+        for entry in table:
+            title: Optional[str] = self.localize.get(entry.get("title"))
+
+            if title is None:
+                title = self.localize.get(entry.get("mapKeyTitle"))
+
+            missions.append(
+                {
+                    "altId": entry.get("ref"),
+                    "name": None if title is None else title.title(),
+                    "description": self.localize.get(entry.get("description")),
+                    "image": entry.get("icon"),
+                    "timed": bool(entry.get("hasTimer")),
+                }
+            )
+
+        return missions
